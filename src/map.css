@@ -23,5 +23,18 @@
   align-items: center;
   font-weight: 900;
   font-size: 1rem;
-  color: #fff; /* Change text color to white for better contrast */
+  color: #fff;
 }
+
+/* .striped-dot {
+  width: 10px;
+  height: 10px;
+  background: repeating-linear-gradient(
+    45deg,
+    red,
+    red 5px,
+    white 5px,
+    white 10px
+  );
+  border-radius: 50%;
+} */

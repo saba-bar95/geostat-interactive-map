@@ -4,11 +4,13 @@ import {
   Popup,
   Marker,
   LayersControl,
+  GeoJSON,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "./map.css";
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import { point, divIcon } from "leaflet";
+import regions from "./assets/regions";
 
 const MapComponent = () => {
   const center = [41.9, 43.9];
@@ -43,14 +45,12 @@ const MapComponent = () => {
     let backgroundColor;
 
     if (childCount < 10) {
-      backgroundColor = "rgba(110, 204, 57, 0.6)";
+      backgroundColor = "rgba(110, 204, 57, 0.9)";
     } else if (childCount >= 10 && childCount < 100) {
-      backgroundColor = "rgba(240, 194, 12, 0.6)";
+      backgroundColor = "rgba(240, 194, 12, 0.9)";
     } else {
-      backgroundColor = "rgba(241, 128, 23, 0.6)";
+      backgroundColor = "rgba(241, 128, 23, 0.9)";
     }
-
-    console.log(childCount); // Log the child count for debugging
 
     return new divIcon({
       html: `<div class="cluster-icon" style="background-color: ${backgroundColor};">${childCount}</div>`,
@@ -59,22 +59,81 @@ const MapComponent = () => {
     });
   };
 
+  const onEachFeature = (feature, layer) => {
+    layer.on({
+      mouseover: (e) => {
+        e.target.setStyle({
+          weight: 4,
+        });
+      },
+      mouseout: () => {
+        layer.setStyle(getStyle(feature));
+      },
+    });
+  };
+
+  const getStyle = (feature) => {
+    const id = +feature.id;
+
+    if (id === 48 || id === 12) {
+      return {
+        color: "red",
+        weight: 2,
+        fillColor: "rgba(255, 0, 0, 0.5)",
+        fillOpacity: 0.5,
+        dashArray: "5, 5",
+      };
+    }
+    return {
+      color: "blue",
+      weight: 1,
+      fillColor: "lightblue",
+      fillOpacity: 0.5,
+    };
+  };
+
   return (
     <>
-      <MapContainer center={center} zoom={8} scrollWheelZoom={false}>
+      <MapContainer
+        center={center}
+        zoom={8}
+        scrollWheelZoom={true}
+        zoomControl={false}>
         <LayersControl>
-          <LayersControl.BaseLayer checked name="OpenStreetMap">
+          <LayersControl.BaseLayer checked name="Google Terrain">
             <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.google.com/intl/en_us/help/terms_maps.html">Google</a>'
+              url="https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"
+              subdomains={["mt0", "mt1", "mt2", "mt3"]}
             />
-          </LayersControl.BaseLayer>
+            <LayersControl.BaseLayer name="Google Street">
+              <TileLayer
+                attribution='&copy; <a href="https://www.google.com/intl/en_us/help/terms_maps.html">Google</a>'
+                url="https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
+                subdomains={["mt0", "mt1", "mt2", "mt3"]}
+              />
+            </LayersControl.BaseLayer>
+            <LayersControl.BaseLayer name="Google Satellite">
+              <TileLayer
+                attribution='&copy; <a href="https://www.google.com/intl/en_us/help/terms_maps.html">Google</a>'
+                url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+                subdomains={["mt0", "mt1", "mt2", "mt3"]}
+              />
+            </LayersControl.BaseLayer>
 
-          <LayersControl.BaseLayer checked name="OpenStreetMap">
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
+            <LayersControl.BaseLayer name="Google Hybrid">
+              <TileLayer
+                attribution='&copy; <a href="https://www.google.com/intl/en_us/help/terms_maps.html">Google</a>'
+                url="https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
+                subdomains={["mt0", "mt1", "mt2", "mt3"]}
+              />
+            </LayersControl.BaseLayer>
+            <LayersControl.BaseLayer name="OpenStreetMap">
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+            </LayersControl.BaseLayer>
           </LayersControl.BaseLayer>
         </LayersControl>
         <MarkerClusterGroup iconCreateFunction={createCustomClusterIcon}>
@@ -84,6 +143,16 @@ const MapComponent = () => {
             </Marker>
           ))}
         </MarkerClusterGroup>
+        {Object.entries(regions).map(([key, value]) => {
+          return (
+            <GeoJSON
+              key={key}
+              data={value}
+              style={getStyle(value)}
+              onEachFeature={onEachFeature} // Attach event handlers
+            />
+          );
+        })}
       </MapContainer>
     </>
   );
