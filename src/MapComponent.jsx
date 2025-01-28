@@ -16,7 +16,7 @@ import getStyle from "./functions/getStyle";
 import onEachFeature from "./functions/onEachFeature";
 import createCustomClusterIcon from "./functions/createCustomClusterIcon";
 import MapEventsHandler from "./functions/MapEventsHandler";
-import markers from "./markers";
+import markers from "./assets/data/markers";
 
 const MapComponent = () => {
   const [zoomLevel, setZoomLevel] = useState(8);
