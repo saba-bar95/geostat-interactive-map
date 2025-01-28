@@ -24,11 +24,7 @@ const MapComponent = () => {
 
   return (
     <>
-      <MapContainer
-        center={center}
-        zoom={8}
-        scrollWheelZoom={true}
-        zoomControl={false}>
+      <MapContainer center={center} zoom={8}>
         <LayersControl>
           <LayersControl.BaseLayer checked name="Google Terrain">
             <TileLayer
@@ -80,9 +76,9 @@ const MapComponent = () => {
             <GeoJSON
               key={key}
               data={value}
-              style={getStyle(value)}
+              style={getStyle(value, zoomLevel, "region")}
               onEachFeature={(feature, layer) => {
-                onEachFeature(feature, layer, "municipality", zoomLevel); // Pass zoomLevel here
+                onEachFeature(feature, layer);
               }}
             />
           );
@@ -93,9 +89,9 @@ const MapComponent = () => {
               <GeoJSON
                 key={el.properties.NAME_GE}
                 data={el}
-                style={getStyle(el)}
+                style={getStyle(el, zoomLevel, "municipality")}
                 onEachFeature={(feature, layer) => {
-                  onEachFeature(feature, layer, "municipality", zoomLevel); // Pass zoomLevel here
+                  onEachFeature(feature, layer);
                 }}
               />
             );
