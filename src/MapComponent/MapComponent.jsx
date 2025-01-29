@@ -8,15 +8,15 @@ import {
 } from "react-leaflet";
 import { useState } from "react";
 import "leaflet/dist/leaflet.css";
-import "./map.css";
+import "./MapComponent.scss";
 import MarkerClusterGroup from "react-leaflet-markercluster";
-import regions from "./assets/data/regions";
-import municipalities from "./assets/data/municipalities";
-import getStyle from "./functions/getStyle";
-import onEachFeature from "./functions/onEachFeature";
-import createCustomClusterIcon from "./functions/createCustomClusterIcon";
-import MapEventsHandler from "./functions/MapEventsHandler";
-import markers from "./assets/data/markers";
+import regions from "../assets/data/regions";
+import municipalities from "../assets/data/municipalities";
+import getStyle from "../functions/getStyle";
+import onEachFeature from "../functions/onEachFeature";
+import createCustomClusterIcon from "../functions/createCustomClusterIcon";
+import MapEventsHandler from "../functions/MapEventsHandler";
+import markers from "../assets/data/markers";
 
 const MapComponent = () => {
   const [zoomLevel, setZoomLevel] = useState(8);
@@ -24,7 +24,7 @@ const MapComponent = () => {
 
   return (
     <>
-      <MapContainer center={center} zoom={8}>
+      <MapContainer center={center} zoom={8} zoomControl={false}>
         <LayersControl>
           <LayersControl.BaseLayer checked name="Google Terrain">
             <TileLayer
