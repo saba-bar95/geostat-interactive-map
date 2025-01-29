@@ -11,10 +11,11 @@
     background-color: #fff; /* Background color */
     height: 100%;
     border: 2px solid gray;
+    display: flex;
+    transition: all 0.3s ease; /* Smooth transition for the container */
 
     ul {
       list-style-type: none;
-      margin: auto;
 
       li {
         padding: 0 10px;
@@ -27,7 +28,7 @@
 
       .selected {
         color: #fff;
-        background-color: #0074d9;
+        background-color: #0074d9 !important;
       }
 
       a {
@@ -52,6 +53,42 @@
 
       .fa-sliders::before {
         content: "\f1de";
+      }
+    }
+
+    .sidebar {
+      min-width: 350px;
+      display: flex;
+      justify-content: space-between;
+
+      h2 {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        color: #fff;
+        background-color: #0074d9 !important;
+        font-size: 20px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        padding: 0 30px;
+        flex: 1;
+        justify-content: start;
+      }
+
+      .sidebar-close {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        i {
+          font-size: 20px;
+        }
+
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        cursor: pointer;
+        background-color: #0074d9 !important;
+        color: #fff;
       }
     }
   }
