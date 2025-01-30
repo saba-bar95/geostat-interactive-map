@@ -1,65 +1,94 @@
 import "./Navigation.scss";
 import { useState } from "react";
+import queries from "./queries";
 
 const Navigation = () => {
-  const [selected, setSelected] = useState(null);
-  const [sidebarTitle, setSidebarTitle] = useState(""); // State to hold the sidebar title
+  const [selectedQuery, setSelectedQuery] = useState(queries[0]);
+  const [selectedLink, setSelectedLink] = useState(null);
 
-  const handleSelect = (index, title) => {
-    if (selected === index) {
-      // If the clicked item is already selected, close the sidebar
-      setSelected(null);
-      setSidebarTitle(""); // Clear the sidebar title
-    } else {
-      // Otherwise, set the selected item and update the sidebar title
-      setSelected(index);
-      setSidebarTitle(title);
-    }
+  // console.log(selectedQuery);
+
+  console.log(selectedLink);
+
+  const handleSelectQuery = (el) => {
+    setSelectedQuery(el);
   };
 
-  const titles = [
-    "დარგი - ბიზნეს სტატისტიკა",
-    "მაჩვენებელი",
-    "დიაგრამა",
-    "ჰისტოგრამა",
-    "ძიება",
-  ];
+  const handleSelectLink = (el) => {
+    console.log(el);
+    setSelectedLink(el);
+    if (selectedLink && el.href === selectedLink.href) setSelectedLink(null);
+  };
+
+  const closeSidebar = () => {
+    setSelectedLink(null);
+  };
 
   return (
     <div className="navigation">
       <div className="navigation-container">
         <ul role="tablist">
-          {["#menu", "#home", "#pie", "#bar", "#gis"].map((href, index) => (
-            <li
-              key={index}
-              className={selected === index ? "selected" : ""}
-              onClick={() => {
-                handleSelect(index, titles[index]); // Pass the title to handleSelect
-              }}>
-              <a role="tab" title={titles[index]}>
-                <i
-                  className={`fa fa-${
-                    href === "#menu"
-                      ? "sliders"
-                      : href === "#home"
-                      ? "table"
-                      : href === "#pie"
-                      ? "pie-chart"
-                      : href === "#bar"
-                      ? "bar-chart"
-                      : "search"
-                  }`}></i>
-              </a>
-            </li>
-          ))}
+          {selectedQuery.links.map((el, i) => {
+            return (
+              <li
+                key={i}
+                onClick={() => handleSelectLink(el)}
+                className={
+                  selectedLink && selectedLink.name === el.name
+                    ? "selected"
+                    : ""
+                }>
+                <a role="tab">
+                  <i
+                    className={`fa fa-${
+                      el.href === "menu"
+                        ? "sliders"
+                        : el.href === "home"
+                        ? "table"
+                        : el.href === "pie"
+                        ? "pie-chart"
+                        : el.href === "bar"
+                        ? "bar-chart"
+                        : "search"
+                    }`}></i>
+                </a>
+              </li>
+            );
+          })}
         </ul>
-        {/* Sidebar to display the title */}
-        {selected !== null && ( // Check if selected is not null
+
+        {selectedLink !== null && (
           <div className="sidebar">
-            <h2>{sidebarTitle}</h2> {/* Show the title if it exists */}
-            <span className="sidebar-close">
-              <i className="fa fa-caret-left"></i>
-            </span>
+            <div className="upper">
+              <h2>
+                {selectedLink.href === "menu"
+                  ? `დარგი - ${selectedLink.name}`
+                  : selectedLink.name}
+              </h2>
+              <span
+                className="sidebar-close"
+                onClick={() => {
+                  closeSidebar();
+                }}>
+                <i className="fa fa-caret-left"></i>
+              </span>
+            </div>
+            {selectedLink.href === "menu" && (
+              <ul>
+                {queries.map((el, i) =>
+                  el.title !== selectedQuery.title ? (
+                    <li
+                      key={i}
+                      onClick={() => {
+                        console.log(el);
+                        handleSelectQuery(el);
+                      }}>
+                      {el.title}
+                    </li>
+                  ) : null
+                )}
+              </ul>
+            )}
           </div>
         )}
       </div>
