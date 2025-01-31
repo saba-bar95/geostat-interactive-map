@@ -1,23 +1,18 @@
 import "./Navigation.scss";
 import { useState } from "react";
 import queries from "./queries";
+import Content from "./Content";
 
 const Navigation = () => {
   const [selectedQuery, setSelectedQuery] = useState(queries[0]);
   const [selectedLink, setSelectedLink] = useState(null);
-
-  // console.log(selectedQuery);
-
-  console.log(selectedLink);
 
   const handleSelectQuery = (el) => {
     setSelectedQuery(el);
   };
 
   const handleSelectLink = (el) => {
-    console.log(el);
     setSelectedLink(el);
-    if (selectedLink && el.href === selectedLink.href) setSelectedLink(null);
   };
 
   const closeSidebar = () => {
@@ -57,6 +52,10 @@ const Navigation = () => {
           })}
         </ul>
 
+        {/* {selectedLink && (
+          <Content selectedLink={selectedLink} selectedQuery={selectedQuery} />
+        )} */}
+
         {selectedLink !== null && (
           <div className="sidebar">
             <div className="upper">
@@ -80,8 +79,8 @@ const Navigation = () => {
                     <li
                       key={i}
                       onClick={() => {
-                        console.log(el);
                         handleSelectQuery(el);
+                        setSelectedLink(el.links[0]);
                       }}>
                       {el.title}
                     </li>

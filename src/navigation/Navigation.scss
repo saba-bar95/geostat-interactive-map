@@ -8,7 +8,6 @@
   padding: 10px; /* Optional padding */
 
   .navigation-container {
-    background-color: #fff; /* Background color */
     height: 100%;
     border: 2px solid gray;
     display: flex;
@@ -16,6 +15,7 @@
 
     ul {
       list-style-type: none;
+      background-color: #fff; /* Background color */
 
       li {
         padding: 0 10px;
@@ -54,6 +54,10 @@
 
     .sidebar {
       min-width: 350px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      background-color: rgba(255, 255, 255, 0.5);
 
       .upper {
         display: flex;
@@ -86,6 +90,26 @@
           i {
             font-size: 20px;
           }
+        }
+      }
+
+      ul {
+        font-size: 14px;
+        color: #84c4e2;
+        text-decoration: underline;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        padding: 5px;
+        width: 90%;
+        margin: 0 20px;
+        max-width: 400px;
+
+        li {
+          line-height: 18px;
         }
       }
     }
