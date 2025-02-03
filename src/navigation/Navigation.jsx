@@ -6,11 +6,13 @@ import { QueriesContext } from "../App";
 const Navigation = () => {
   const {
     selectedQuery,
-    handleSelectQuery,
     selectedLink,
+    handleSelectQuery,
     handleSelectLink,
     closeSidebar,
   } = useContext(QueriesContext);
+
+  console.log(selectedQuery, selectedLink);
 
   return (
     <div className="navigation">
@@ -44,10 +46,6 @@ const Navigation = () => {
             );
           })}
         </ul>
-
-        {/* {selectedLink && (
-          <Content selectedLink={selectedLink} selectedQuery={selectedQuery} />
-        )} */}
 
         {selectedLink !== null && (
           <div className="sidebar">
