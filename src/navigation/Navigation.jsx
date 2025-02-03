@@ -1,23 +1,16 @@
 import "./Navigation.scss";
-import { useState } from "react";
+import { useContext } from "react";
 import queries from "./queries";
-import Content from "./Content";
+import { QueriesContext } from "../App";
 
 const Navigation = () => {
-  const [selectedQuery, setSelectedQuery] = useState(queries[0]);
-  const [selectedLink, setSelectedLink] = useState(null);
-
-  const handleSelectQuery = (el) => {
-    setSelectedQuery(el);
-  };
-
-  const handleSelectLink = (el) => {
-    setSelectedLink(el);
-  };
-
-  const closeSidebar = () => {
-    setSelectedLink(null);
-  };
+  const {
+    selectedQuery,
+    handleSelectQuery,
+    selectedLink,
+    handleSelectLink,
+    closeSidebar,
+  } = useContext(QueriesContext);
 
   return (
     <div className="navigation">
@@ -80,7 +73,7 @@ const Navigation = () => {
                       key={i}
                       onClick={() => {
                         handleSelectQuery(el);
-                        setSelectedLink(el.links[0]);
+                        handleSelectLink(el.links[0]);
                       }}>
                       {el.title}
                     </li>

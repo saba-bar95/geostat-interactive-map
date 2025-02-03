@@ -6,7 +6,7 @@ import {
   LayersControl,
   GeoJSON,
 } from "react-leaflet";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import "leaflet/dist/leaflet.css";
 import "./MapComponent.scss";
 import MarkerClusterGroup from "react-leaflet-markercluster";
@@ -17,6 +17,7 @@ import onEachFeature from "../functions/onEachFeature";
 import createCustomClusterIcon from "../functions/createCustomClusterIcon";
 import MapEventsHandler from "../functions/MapEventsHandler";
 import markers from "../assets/data/markers";
+import { QueriesContext } from "../App";
 
 const MapComponent = () => {
   const [zoomLevel, setZoomLevel] = useState(8);
