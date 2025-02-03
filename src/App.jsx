@@ -30,7 +30,7 @@ function App() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://192.168.1.27:3001/api/getRegBrunva?year=2022"
+          "https://192.168.1.27:3001/api/getRegBrunva?year=2022"
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
