@@ -88,8 +88,12 @@ const MapComponent = () => {
                 }}>
                 <Popup>
                   <p style={{ fontWeight: "900" }}>{key}</p>
-                  <p style={{ fontWeight: "900" }}>{indicator}</p>
-                  <p>{regionNumber} (მლნ. ლარი)</p>
+                  {value.id !== "12" && value.id !== "48" && (
+                    <p style={{ fontWeight: "900" }}>{indicator}</p>
+                  )}
+                  {value.id !== "12" && value.id !== "48" && (
+                    <p>{regionNumber} (მლნ. ლარი)</p>
+                  )}
                 </Popup>
               </GeoJSON>
             );
