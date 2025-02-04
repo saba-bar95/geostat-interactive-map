@@ -1,8 +1,8 @@
+import backEndUrl from "../BackEndUrl";
+
 const fetchTurnoverData = async (year) => {
   try {
-    const response = await fetch(
-      `http://192.168.1.27:3001/api/getRegBrunva?year=${year}`
-    );
+    const response = await fetch(`${backEndUrl}/api/getRegBrunva?year=${year}`);
 
     if (!response.ok) {
       throw new Error("Network response was not ok");

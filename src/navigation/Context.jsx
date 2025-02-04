@@ -15,8 +15,6 @@ const componentMap = {
 const Context = () => {
   const { selectedQuery, selectedLink } = useContext(QueriesContext);
 
-  console.log(selectedQuery, selectedLink);
-
   if (selectedQuery.title !== "ბიზნეს სტატისტიკა") {
     return null; // or some fallback component
   }

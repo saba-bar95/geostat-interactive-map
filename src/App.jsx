@@ -9,11 +9,14 @@ import fetchTurnoverData from "./functions/fetchTurnoverData";
 export const QueriesContext = createContext();
 
 function App() {
+  const initialIndicator = "ბრუნვა";
+  const initialIndicatorYear = 2022;
+
   const [selectedQuery, setSelectedQuery] = useState(queries[0]);
   const [selectedLink, setSelectedLink] = useState(null);
   const [data, setData] = useState(null);
-
-  console.log(data);
+  const [indicator, setIndicator] = useState(initialIndicator);
+  const [indicatorYear, setIndicatorYear] = useState(initialIndicatorYear);
 
   const handleSelectQuery = (el) => {
     setSelectedQuery(el);
@@ -43,11 +46,15 @@ function App() {
       value={{
         selectedQuery,
         selectedLink,
-        handleSelectQuery,
-        handleSelectLink,
+        indicator,
+        indicatorYear,
         closeSidebar,
         data,
         setData,
+        setIndicator,
+        setIndicatorYear,
+        handleSelectLink,
+        handleSelectQuery,
       }}>
       <div className="app-container">
         <Navigation />
