@@ -2,6 +2,7 @@ import "./Navigation.scss";
 import { useContext } from "react";
 import queries from "./queries";
 import { QueriesContext } from "../App";
+import Context from "./Context";
 
 const Navigation = () => {
   const {
@@ -11,8 +12,6 @@ const Navigation = () => {
     handleSelectLink,
     closeSidebar,
   } = useContext(QueriesContext);
-
-  console.log(selectedQuery, selectedLink);
 
   return (
     <div className="navigation">
@@ -27,7 +26,8 @@ const Navigation = () => {
                   selectedLink && selectedLink.name === el.name
                     ? "selected"
                     : ""
-                }>
+                }
+                title={el.name}>
                 <a role="tab">
                   <i
                     className={`fa fa-${
@@ -39,6 +39,8 @@ const Navigation = () => {
                         ? "pie-chart"
                         : el.href === "bar"
                         ? "bar-chart"
+                        : el.href === "regmun"
+                        ? "globe"
                         : "search"
                     }`}></i>
                 </a>
@@ -79,6 +81,7 @@ const Navigation = () => {
                 )}
               </ul>
             )}
+            {selectedLink.href !== "menu" && <Context />}
           </div>
         )}
       </div>

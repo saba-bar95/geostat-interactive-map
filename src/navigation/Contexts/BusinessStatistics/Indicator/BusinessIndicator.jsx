@@ -1,13 +1,25 @@
-import "./Indicator.scss";
+import "./BusinessIndicator.scss";
 import indicators from "./indicators";
 import years from "./years";
 import { useContext } from "react";
 import { QueriesContext } from "../../../../App";
+import fetchTurnoverData from "../../../../functions/fetchTurnoverData";
 
-const Indicator = () => {
-  //   const { linkState, setLinkState } = useContext(QueriesContext);
+const BusinessIndicator = () => {
+  const { setData } = useContext(QueriesContext);
 
-  //   console.log(linkState);
+  const handleSelectChange = (e) => {
+    const year = e.target.value.split(" ")[0];
+
+    const getData = async () => {
+      const fetchedData = await fetchTurnoverData(year); // Call the utility function
+      if (fetchedData) {
+        setData(fetchedData); // Set the fetched data to state
+      }
+    };
+
+    getData(); // Call the fetch function
+  };
 
   return (
     <div className="business-indicator">
@@ -19,10 +31,10 @@ const Indicator = () => {
         </select>
       </div>
       <div className="container">
-        <select name="yearSelect" id="year">
+        <select name="yearSelect" id="year" onChange={handleSelectChange}>
           {years.map((el) => {
             return (
-              <option key={el} selected={el === 2022}>
+              <option key={el} defaultValue={el === 2022}>
                 {el} წელი
               </option>
             );
@@ -35,4 +47,4 @@ const Indicator = () => {
   );
 };
 
-export default Indicator;
+export default BusinessIndicator;

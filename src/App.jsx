@@ -4,15 +4,16 @@ import Navigation from "./navigation/Navigation";
 import "./App.scss"; // Assuming you have some global styles
 import queries from "./navigation/queries";
 import { useState, createContext, useEffect } from "react";
+import fetchTurnoverData from "./functions/fetchTurnoverData";
 
 export const QueriesContext = createContext();
 
 function App() {
   const [selectedQuery, setSelectedQuery] = useState(queries[0]);
   const [selectedLink, setSelectedLink] = useState(null);
-  const [linkState, setLinkState] = useState(null);
+  const [data, setData] = useState(null);
 
-  console.log(linkState);
+  console.log(data);
 
   const handleSelectQuery = (el) => {
     setSelectedQuery(el);
@@ -27,22 +28,14 @@ function App() {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          "http://192.168.1.27:3001/api/getRegBrunva?year=2022"
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setLinkState(data); // Set the fetched data to state
-      } catch (error) {
-        console.error(error.message); // Set error message if fetch fails
+    const getData = async () => {
+      const fetchedData = await fetchTurnoverData(2022); // Call the utility function
+      if (fetchedData) {
+        setData(fetchedData); // Set the fetched data to state
       }
     };
 
-    fetchData(); // Call the fetch function
+    getData(); // Call the fetch function
   }, []); // Empty dependency array means this runs once when the component mounts
 
   return (
@@ -53,6 +46,8 @@ function App() {
         handleSelectQuery,
         handleSelectLink,
         closeSidebar,
+        data,
+        setData,
       }}>
       <div className="app-container">
         <Navigation />
