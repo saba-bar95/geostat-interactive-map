@@ -14,10 +14,7 @@ const Span = styled.span`
 
 const ColorBox = () => {
   const { indicator } = useContext(QueriesContext);
-
   const indicatorInfo = numIntervals[indicator];
-
-  console.log(indicatorInfo);
 
   return (
     <div className="colorbox-container">

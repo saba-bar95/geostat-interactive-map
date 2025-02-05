@@ -1,4 +1,4 @@
-const getStyle = (feature, zoomLevel, type) => {
+const getStyle = (feature, zoomLevel, type, color) => {
   const id = +feature.id;
 
   if (zoomLevel > 8 && type === "municipality") {
@@ -6,7 +6,7 @@ const getStyle = (feature, zoomLevel, type) => {
       color: "gray",
       weight: 2,
       fillOpacity: 0.3,
-      fillColor: "rgb(216, 242, 237)",
+      fillColor: color,
     };
   }
 
@@ -40,7 +40,7 @@ const getStyle = (feature, zoomLevel, type) => {
     return {
       color: "#78716c",
       weight: 3,
-      fillColor: "#154f4a",
+      fillColor: color,
       fillOpacity: 0.5,
     };
   }

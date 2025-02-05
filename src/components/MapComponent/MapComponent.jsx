@@ -18,6 +18,8 @@ import createCustomClusterIcon from "../../functions/createCustomClusterIcon";
 import MapEventsHandler from "../../functions/MapEventsHandler";
 import markers from "../../coordinates/markers";
 import { QueriesContext } from "../../App";
+import numIntervals from "../ColorBox/numIntervals";
+import checkNumberRange from "../../functions/checkNumberRange";
 
 const MapComponent = () => {
   const [zoomLevel, setZoomLevel] = useState(8);
@@ -25,6 +27,7 @@ const MapComponent = () => {
 
   const { regData, munData, indicator, indicatorYear } =
     useContext(QueriesContext);
+  const indicatorInfo = numIntervals[indicator];
 
   return (
     <>
@@ -81,11 +84,13 @@ const MapComponent = () => {
               (region) => region.region_id === value.id
             );
             const regionNumber = region ? region[`w_${indicatorYear}`] : "N/A"; // Default to "N/A" if not found
+            const regColor = checkNumberRange(regionNumber, indicatorInfo);
+
             return (
               <GeoJSON
                 key={key}
                 data={value}
-                style={getStyle(value, zoomLevel, "region")}
+                style={getStyle(value, zoomLevel, "region", regColor)}
                 onEachFeature={(feature, layer) => {
                   onEachFeature(feature, layer);
                 }}>
@@ -110,11 +115,13 @@ const MapComponent = () => {
                 ? municipality[`w_${indicatorYear}`]
                 : "N/A";
 
+              const munColor = checkNumberRange(munNumber, indicatorInfo);
+
               return (
                 <GeoJSON
                   key={el.properties.NAME_GE}
                   data={el}
-                  style={getStyle(el, zoomLevel, "municipality")}
+                  style={getStyle(el, zoomLevel, "municipality", munColor)}
                   onEachFeature={(feature, layer) => {
                     onEachFeature(feature, layer);
                   }}>
