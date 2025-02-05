@@ -1,0 +1,32 @@
+.colorbox-container {
+  position: sticky;
+  bottom: 0;
+  width: max-content;
+  left: 100%;
+  z-index: 1;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.8);
+
+  h1 {
+    color: #555;
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 7px;
+  }
+
+  .para-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    p {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+  }
+}

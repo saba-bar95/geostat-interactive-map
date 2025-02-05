@@ -1,8 +1,8 @@
 import "./Navigation.scss";
 import { useContext } from "react";
 import queries from "./queries";
-import { QueriesContext } from "../App";
-import Context from "./Context";
+import { QueriesContext } from "../../App";
+import Context from "../Context/Context";
 
 const Navigation = () => {
   const {

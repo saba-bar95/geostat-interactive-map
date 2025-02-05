@@ -2,8 +2,8 @@ import "./BusinessIndicator.scss";
 import indicators from "./indicators";
 import years from "./years";
 import { useContext } from "react";
-import { QueriesContext } from "../../../../App";
-import fetchTurnoverData from "../../../../functions/fetchTurnoverData";
+import { QueriesContext } from "../../../../../App";
+import fetchTurnoverData from "../../../../../functions/fetchTurnoverData";
 
 const BusinessIndicator = () => {
   const { setRegData, setMunData, setIndicator, setIndicatorYear } =
@@ -32,7 +32,7 @@ const BusinessIndicator = () => {
       }
     };
 
-    getMunData();
+    if (year > 2013) getMunData();
     getRegData(); // Call the fetch function
   };
 

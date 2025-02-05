@@ -1,10 +1,10 @@
-// src/App.js
-import MapComponent from "./MapComponent/MapComponent";
-import Navigation from "./navigation/Navigation";
-import "./App.scss"; // Assuming you have some global styles
-import queries from "./navigation/queries";
+import "./App.scss";
+import MapComponent from "./components/MapComponent/MapComponent";
+import Navigation from "./components/Navigation/Navigation";
+import queries from "./components/Navigation/queries";
 import { useState, createContext, useEffect } from "react";
 import fetchTurnoverData from "./functions/fetchTurnoverData";
+import ColorBox from "./components/ColorBox/ColorBox";
 
 export const QueriesContext = createContext();
 
@@ -72,6 +72,7 @@ function App() {
         <div className="map-container">
           <MapComponent />
         </div>
+        <ColorBox />
       </div>
     </QueriesContext.Provider>
   );

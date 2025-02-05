@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { QueriesContext } from "../App";
+import { QueriesContext } from "../../App";
 import BusinessIndicator from "./Contexts/BusinessStatistics/Indicator/BusinessIndicator";
 import BusinessDiagram from "./Contexts/BusinessStatistics/BusinessDiagram/BusinessDiagram";
 import BusinessHistogram from "./Contexts/BusinessStatistics/BusinessHistogram/BusinessHistogram";

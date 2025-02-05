@@ -10,14 +10,14 @@ import { useState, useContext } from "react";
 import "leaflet/dist/leaflet.css";
 import "./MapComponent.scss";
 import MarkerClusterGroup from "react-leaflet-markercluster";
-import regions from "../assets/data/regions";
-import municipalities from "../assets/data/municipalities";
-import getStyle from "../functions/getStyle";
-import onEachFeature from "../functions/onEachFeature";
-import createCustomClusterIcon from "../functions/createCustomClusterIcon";
-import MapEventsHandler from "../functions/MapEventsHandler";
-import markers from "../assets/data/markers";
-import { QueriesContext } from "../App";
+import regions from "../../coordinates/regions";
+import municipalities from "../../coordinates/municipalities";
+import getStyle from "../../functions/getStyle";
+import onEachFeature from "../../functions/onEachFeature";
+import createCustomClusterIcon from "../../functions/createCustomClusterIcon";
+import MapEventsHandler from "../../functions/MapEventsHandler";
+import markers from "../../coordinates/markers";
+import { QueriesContext } from "../../App";
 
 const MapComponent = () => {
   const [zoomLevel, setZoomLevel] = useState(8);
