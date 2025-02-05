@@ -6,7 +6,7 @@ import { QueriesContext } from "../../../../App";
 import fetchTurnoverData from "../../../../functions/fetchTurnoverData";
 
 const BusinessIndicator = () => {
-  const { setData, setIndicator, setIndicatorYear } =
+  const { setRegData, setMunData, setIndicator, setIndicatorYear } =
     useContext(QueriesContext);
 
   const handleIndicatorChanger = (e) => {
@@ -18,14 +18,22 @@ const BusinessIndicator = () => {
 
     setIndicatorYear(year);
 
-    const getData = async () => {
-      const fetchedData = await fetchTurnoverData(year); // Call the utility function
+    const getRegData = async () => {
+      const fetchedData = await fetchTurnoverData("Reg", year); // Call the utility function
       if (fetchedData) {
-        setData(fetchedData); // Set the fetched data to state
+        setRegData(fetchedData); // Set the fetched data to state
       }
     };
 
-    getData(); // Call the fetch function
+    const getMunData = async () => {
+      const fetchedData = await fetchTurnoverData("Mun", year); // Call the utility function
+      if (fetchedData) {
+        setMunData(fetchedData);
+      }
+    };
+
+    getMunData();
+    getRegData(); // Call the fetch function
   };
 
   return (

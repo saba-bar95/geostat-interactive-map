@@ -23,11 +23,12 @@ const MapComponent = () => {
   const [zoomLevel, setZoomLevel] = useState(8);
   const center = [41.9, 43.9];
 
-  const { data, indicator, indicatorYear } = useContext(QueriesContext);
+  const { regData, munData, indicator, indicatorYear } =
+    useContext(QueriesContext);
 
   return (
     <>
-      {data && (
+      {regData && (
         <MapContainer center={center} zoom={8} zoomControl={false}>
           <LayersControl>
             <LayersControl.BaseLayer checked name="Google Terrain">
@@ -76,7 +77,9 @@ const MapComponent = () => {
           </MarkerClusterGroup>
 
           {Object.entries(regions).map(([key, value]) => {
-            const region = data.find((region) => region.region_id === value.id);
+            const region = regData.find(
+              (region) => region.region_id === value.id
+            );
             const regionNumber = region ? region[`w_${indicatorYear}`] : "N/A"; // Default to "N/A" if not found
             return (
               <GeoJSON
@@ -87,9 +90,9 @@ const MapComponent = () => {
                   onEachFeature(feature, layer);
                 }}>
                 <Popup>
-                  <p style={{ fontWeight: "900" }}>{key}</p>
+                  <p className="popup-para">{key}</p>
                   {value.id !== "12" && value.id !== "48" && (
-                    <p style={{ fontWeight: "900" }}>{indicator}</p>
+                    <p className="popup-para">{indicator}</p>
                   )}
                   {value.id !== "12" && value.id !== "48" && (
                     <p>{regionNumber} (მლნ. ლარი)</p>
@@ -100,6 +103,13 @@ const MapComponent = () => {
           })}
           {zoomLevel > 8 &&
             municipalities.features.map((el) => {
+              const municipality = munData.find(
+                (mun) => mun.municipal_ === el.properties.MUNICIPAL1
+              );
+              const munNumber = municipality
+                ? municipality[`w_${indicatorYear}`]
+                : "N/A";
+
               return (
                 <GeoJSON
                   key={el.properties.NAME_GE}
@@ -107,8 +117,13 @@ const MapComponent = () => {
                   style={getStyle(el, zoomLevel, "municipality")}
                   onEachFeature={(feature, layer) => {
                     onEachFeature(feature, layer);
-                  }}
-                />
+                  }}>
+                  <Popup>
+                    <p className="popup-para">{el.properties.NAME_SYLFA}</p>
+                    <p className="popup-para">{indicator}</p>
+                    <p>{munNumber} (მლნ. ლარი)</p>
+                  </Popup>
+                </GeoJSON>
               );
             })}
           <MapEventsHandler setZoomLevel={setZoomLevel} />

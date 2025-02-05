@@ -14,7 +14,8 @@ function App() {
 
   const [selectedQuery, setSelectedQuery] = useState(queries[0]);
   const [selectedLink, setSelectedLink] = useState(null);
-  const [data, setData] = useState(null);
+  const [regData, setRegData] = useState(null);
+  const [munData, setMunData] = useState(null);
   const [indicator, setIndicator] = useState(initialIndicator);
   const [indicatorYear, setIndicatorYear] = useState(initialIndicatorYear);
 
@@ -32,12 +33,20 @@ function App() {
 
   useEffect(() => {
     const getData = async () => {
-      const fetchedData = await fetchTurnoverData(2022); // Call the utility function
+      const fetchedData = await fetchTurnoverData("Reg", 2022); // Call the utility function
       if (fetchedData) {
-        setData(fetchedData); // Set the fetched data to state
+        setRegData(fetchedData); // Set the fetched data to state
       }
     };
 
+    const getMunData = async () => {
+      const fetchedData = await fetchTurnoverData("Mun", 2022); // Call the utility function
+      if (fetchedData) {
+        setMunData(fetchedData);
+      }
+    };
+
+    getMunData();
     getData(); // Call the fetch function
   }, []); // Empty dependency array means this runs once when the component mounts
 
@@ -49,8 +58,10 @@ function App() {
         indicator,
         indicatorYear,
         closeSidebar,
-        data,
-        setData,
+        regData,
+        munData,
+        setRegData,
+        setMunData,
         setIndicator,
         setIndicatorYear,
         handleSelectLink,

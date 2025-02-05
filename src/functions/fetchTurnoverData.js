@@ -1,8 +1,10 @@
 import backEndUrl from "../BackEndUrl";
 
-const fetchTurnoverData = async (year) => {
+const fetchTurnoverData = async (scale, year) => {
   try {
-    const response = await fetch(`${backEndUrl}/api/getRegBrunva?year=${year}`);
+    const response = await fetch(
+      `${backEndUrl}/api/get${scale}Brunva?year=${year}`
+    );
 
     if (!response.ok) {
       throw new Error("Network response was not ok");
