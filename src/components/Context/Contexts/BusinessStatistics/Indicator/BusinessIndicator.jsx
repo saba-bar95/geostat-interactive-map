@@ -1,12 +1,14 @@
 import "./BusinessIndicator.scss";
 import indicators from "./indicators";
 import years from "./years";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { QueriesContext } from "../../../../../App";
-import fetchTurnoverData from "../../../../../functions/fetchTurnoverData";
 import numIntervals from "../../../../ColorBox/numIntervals";
 import AngleRight from "./AngleRight";
 import AngleDown from "./AngleDown";
+import getBrunva from "../../../../../functions/fetchFunctions/getBrunva";
+import getValAdded from "../../../../../functions/fetchFunctions/getValAdded";
+import municipalities from "../../../../../coordinates/municipalities";
 
 const BusinessIndicator = () => {
   const {
@@ -22,10 +24,7 @@ const BusinessIndicator = () => {
 
   const indicatorInfo = numIntervals[indicator].measurement;
 
-  const [selected, setSelected] = useState(null);
-
-  // console.log(regData);
-  // console.log(munData);
+  const [selectedRegionId, setSelectedRegionId] = useState(null);
 
   const sortedRegions = regData
     .filter((region) => region[`w_${indicatorYear}`] !== null) // Exclude regions with null values
@@ -37,26 +36,48 @@ const BusinessIndicator = () => {
 
   const handleYearChange = (e) => {
     const year = e.target.value.split(" ")[0];
-
     setIndicatorYear(year);
-
-    const getRegData = async () => {
-      const fetchedData = await fetchTurnoverData("Reg", year); // Call the utility function
-      if (fetchedData) {
-        setRegData(fetchedData); // Set the fetched data to state
-      }
-    };
-
-    const getMunData = async () => {
-      const fetchedData = await fetchTurnoverData("Mun", year); // Call the utility function
-      if (fetchedData) {
-        setMunData(fetchedData);
-      }
-    };
-
-    if (year > 2013) getMunData();
-    getRegData(); // Call the fetch function
   };
+
+  console.log(munData);
+
+  useEffect(() => {
+    const fetchTurnoverData = async (type, year) => {
+      const fetchedData = await getBrunva(type, year); // For "ბრუნვა"
+      if (fetchedData) {
+        if (type === "Reg") {
+          setRegData(fetchedData);
+        } else {
+          setMunData(fetchedData);
+        }
+      }
+    };
+
+    const fetchValAddedData = async (type, year) => {
+      const fetchedData = await getValAdded(type, year); // For "დამატებული ღირებულება"
+      if (fetchedData) {
+        if (type === "") {
+          setRegData(fetchedData);
+        } else {
+          setMunData(fetchedData);
+        }
+      }
+    };
+
+    if (indicator === "ბრუნვა") {
+      if (indicatorYear > 2013) {
+        fetchTurnoverData("Mun", indicatorYear);
+      }
+      fetchTurnoverData("Reg", indicatorYear);
+    }
+
+    if (indicator === "დამატებული ღირებულება") {
+      if (indicatorYear > 2013) {
+        fetchValAddedData("Mun", indicatorYear);
+      }
+      fetchValAddedData("", indicatorYear);
+    }
+  }, [indicatorYear, setMunData, setRegData, indicator]);
 
   return (
     <div className="business-indicator">
@@ -88,21 +109,70 @@ const BusinessIndicator = () => {
           <p>{indicatorInfo}</p>
         </div>
         <div className="regions">
-          {sortedRegions.map((region) => (
-            <div key={region.region_id} className="paras">
-              {region[`w_${indicatorYear}`] > 0 && (
-                <>
-                  <p>
-                    <AngleRight />
-                    <AngleDown />
+          {sortedRegions.map((region) => {
+            const regId = region.region_id;
 
-                    {region.name_ge}
-                  </p>
-                  <p>{region[`w_${indicatorYear}`].toFixed(1)}</p>
-                </>
-              )}
-            </div>
-          ))}
+            const muns = munData.filter((mun) => {
+              const munId = mun.municipal_ ? mun.municipal_.slice(0, 2) : 0;
+              return munId === regId;
+            });
+
+            return (
+              <div className="wrapper" key={regId}>
+                <div
+                  className={`paras ${regId === "11" ? "paras-tbilisi" : ""}`} // Add conditional class here
+                  onClick={() => {
+                    if (regId === selectedRegionId) setSelectedRegionId(null);
+                    else setSelectedRegionId(regId); // Set the selected region ID
+                  }}>
+                  {region[`w_${indicatorYear}`] > 0 && (
+                    <>
+                      <p>
+                        {regId === "11" ? null : selectedRegionId === regId ? (
+                          <>
+                            <AngleDown />
+                          </>
+                        ) : (
+                          <>
+                            <AngleRight />
+                          </>
+                        )}
+                        {region.name_ge}
+                      </p>
+                      <p>
+                        {typeof region[`w_${indicatorYear}`] === "number"
+                          ? region[`w_${indicatorYear}`].toFixed(1)
+                          : region[`w_${indicatorYear}`]}
+                      </p>
+                    </>
+                  )}
+                </div>
+                {selectedRegionId === regId && regId !== "11" && (
+                  <div className="mun-container">
+                    {muns.map((mun) => {
+                      const name = municipalities.features
+                        .filter(
+                          (mun1) =>
+                            mun1.properties.MUNICIPAL1 === mun.municipal_
+                        )
+                        .map((mun2) => mun2.properties.NAME_SYLFA); // Extract NAME_SYLFA from the filtered results
+
+                      return (
+                        <div className="mun-paras" key={mun.municipal_}>
+                          <p>{name}</p>
+                          <p>
+                            {typeof mun[`w_${indicatorYear}`] === "number"
+                              ? mun[`w_${indicatorYear}`].toFixed(1)
+                              : mun[`w_${indicatorYear}`]}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

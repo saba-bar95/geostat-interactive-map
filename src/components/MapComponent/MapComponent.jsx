@@ -100,7 +100,12 @@ const MapComponent = () => {
                     <p className="popup-para">{indicator}</p>
                   )}
                   {value.id !== "12" && value.id !== "48" && (
-                    <p>{regionNumber} (მლნ. ლარი)</p>
+                    <p>
+                      {typeof regionNumber === "number"
+                        ? regionNumber.toFixed(1)
+                        : regionNumber}{" "}
+                      (მლნ. ლარი)
+                    </p>
                   )}
                 </Popup>
               </GeoJSON>
@@ -128,7 +133,12 @@ const MapComponent = () => {
                   <Popup>
                     <p className="popup-para">{el.properties.NAME_SYLFA}</p>
                     <p className="popup-para">{indicator}</p>
-                    <p>{munNumber} (მლნ. ლარი)</p>
+                    <p>
+                      {typeof munNumber === "number"
+                        ? munNumber.toFixed(1)
+                        : munNumber}{" "}
+                      (მლნ. ლარი)
+                    </p>
                   </Popup>
                 </GeoJSON>
               );

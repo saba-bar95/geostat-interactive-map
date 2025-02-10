@@ -43,7 +43,7 @@
         p {
           display: flex;
           align-items: center;
-          gap: 3px;
+          gap: 10px;
         }
 
         &:hover {
@@ -51,6 +51,31 @@
           font-weight: 700;
           font-size: 15px;
           cursor: pointer;
+        }
+      }
+
+      .paras-tbilisi {
+        margin-left: 23px;
+      }
+
+      .mun-container {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-left: 15px;
+        margin-top: 5px;
+
+        .mun-paras {
+          display: flex;
+          justify-content: space-between;
+          color: #555;
+          font-size: 14px;
+
+          &:hover {
+            color: darkblue;
+            font-weight: 700;
+            cursor: pointer;
+          }
         }
       }
     }

@@ -24,7 +24,7 @@ const ColorBox = () => {
       <div className="para-container">
         <p>
           <Span $bgColor={indicatorInfo["1para"].color}></Span>
-          {indicatorInfo["1para"].num}
+          &lt; {indicatorInfo["1para"].num}
         </p>
         <p>
           <Span $bgColor={indicatorInfo["2para"].color}></Span>

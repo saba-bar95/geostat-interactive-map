@@ -3,8 +3,8 @@ import MapComponent from "./components/MapComponent/MapComponent";
 import Navigation from "./components/Navigation/Navigation";
 import queries from "./components/Navigation/queries";
 import { useState, createContext, useEffect } from "react";
-import fetchTurnoverData from "./functions/fetchTurnoverData";
 import ColorBox from "./components/ColorBox/ColorBox";
+import getBrunva from "./functions/fetchFunctions/getBrunva";
 
 export const QueriesContext = createContext();
 
@@ -33,14 +33,14 @@ function App() {
 
   useEffect(() => {
     const getData = async () => {
-      const fetchedData = await fetchTurnoverData("Reg", 2022); // Call the utility function
+      const fetchedData = await getBrunva("Reg", 2022); // Call the utility function
       if (fetchedData) {
         setRegData(fetchedData); // Set the fetched data to state
       }
     };
 
     const getMunData = async () => {
-      const fetchedData = await fetchTurnoverData("Mun", 2022); // Call the utility function
+      const fetchedData = await getBrunva("Mun", 2022); // Call the utility function
       if (fetchedData) {
         setMunData(fetchedData);
       }
