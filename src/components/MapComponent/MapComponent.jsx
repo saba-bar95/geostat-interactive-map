@@ -81,9 +81,14 @@ const MapComponent = () => {
         {regData &&
           Object.entries(regions).map(([key, value]) => {
             const region = regData.find(
-              (region) => region.region_id === value.id
+              (region) =>
+                +region.region_id === +value.id ||
+                region.REGION_ID === +value.id
             );
-            const regionNumber = region ? region[`w_${indicatorYear}`] : "N/A"; // Default to "N/A" if not found
+
+            const regionNumber = region ? region[`w_${indicatorYear}`] : 0; // Default to "N/A" if not found
+            const regionFemaleNumber = region[`F_${indicatorYear}`] || null;
+            const regionMaleNumber = region[`M_${indicatorYear}`] || null;
             const regColor = checkNumberRange(regionNumber, indicatorInfo);
 
             return (
@@ -96,15 +101,27 @@ const MapComponent = () => {
                 }}>
                 <Popup>
                   <p className="popup-para">{key}</p>
-                  {value.id !== "12" && value.id !== "48" && (
-                    <p className="popup-para">{indicator}</p>
-                  )}
-                  {value.id !== "12" && value.id !== "48" && (
+
+                  {typeof regionNumber === "number" &&
+                    value.id !== "12" &&
+                    value.id !== "48" && (
+                      <>
+                        <p className="popup-para">{indicator}</p>
+                        <p>
+                          {regionNumber.toFixed(1)} ({indicatorInfo.measurement}
+                          ){" "}
+                        </p>
+                      </>
+                    )}
+
+                  {regionFemaleNumber && (
                     <p>
-                      {typeof regionNumber === "number"
-                        ? regionNumber.toFixed(1)
-                        : regionNumber}{" "}
-                      (მლნ. ლარი)
+                      ქალი: {regionFemaleNumber} ({indicatorInfo.measurement}){" "}
+                    </p>
+                  )}
+                  {regionMaleNumber && (
+                    <p>
+                      კაცი: {regionMaleNumber} ({indicatorInfo.measurement})
                     </p>
                   )}
                 </Popup>

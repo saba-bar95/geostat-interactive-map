@@ -19,7 +19,7 @@ const ColorBox = () => {
   return (
     <div className="colorbox-container">
       <h1>
-        {indicator} {indicatorInfo.measurement}{" "}
+        {indicator} ({indicatorInfo.measurement})
       </h1>
       <div className="para-container">
         <p>
