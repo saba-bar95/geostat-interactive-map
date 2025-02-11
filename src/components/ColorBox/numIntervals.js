@@ -20,7 +20,7 @@ const numIntervals = {
       num: [5001],
       color: "#154f4a",
     },
-    measurement: "(მლნ. ლარი)",
+    measurement: "მლნ. ლარი",
   },
   "დამატებული ღირებულება": {
     "1para": {
@@ -43,7 +43,7 @@ const numIntervals = {
       num: [5001],
       color: "#606b2d",
     },
-    measurement: "(მლნ. ლარი)",
+    measurement: "მლნ. ლარი",
   },
   "დაქირავებულთა რაოდენობა": {
     "1para": {
@@ -89,7 +89,7 @@ const numIntervals = {
       num: [40001],
       color: "#8f0a0a",
     },
-    measurement: "(კაცი)",
+    measurement: "კაცი",
   },
   "გადასაყიდად განკ. საქონლისა და მომს. ყიდვები": {
     "1para": {
@@ -112,7 +112,7 @@ const numIntervals = {
       num: [5001],
       color: "#664830",
     },
-    measurement: "(მლნ. ლარი)",
+    measurement: "მლნ. ლარი",
   },
   "ინვესტიციები ფიქსირებულ აქტივებში": {
     "1para": {
@@ -135,7 +135,7 @@ const numIntervals = {
       num: [301],
       color: "#004da8",
     },
-    measurement: "(მლნ. ლარი)",
+    measurement: "მლნ. ლარი",
   },
   "პროდუქციის გამოშვება": {
     "1para": {
@@ -158,7 +158,7 @@ const numIntervals = {
       num: [5001],
       color: "#442e23",
     },
-    measurement: "(მლნ. ლარი)",
+    measurement: "მლნ. ლარი",
   },
   "საქონლისა და მომსახურების ყიდვები": {
     "1para": {
@@ -181,7 +181,7 @@ const numIntervals = {
       num: [5001],
       color: "#9ca9d6",
     },
-    measurement: "(მლნ. ლარი)",
+    measurement: "მლნ. ლარი",
   },
   "საშუალო თვიური შრომის ანაზღაურება": {
     "1para": {
@@ -204,7 +204,7 @@ const numIntervals = {
       num: [701],
       color: "#5d2c70",
     },
-    measurement: "(ლარი)",
+    measurement: "ლარი",
   },
   "შრომითი დანახარჯები": {
     "1para": {
@@ -227,7 +227,7 @@ const numIntervals = {
       num: [601],
       color: "#d7c29e",
     },
-    measurement: "(მლნ. ლარი)",
+    measurement: "მლნ. ლარი",
   },
   "შუალედური მოხმარება": {
     "1para": {
@@ -250,7 +250,7 @@ const numIntervals = {
       num: [701],
       color: "#226633",
     },
-    measurement: "(მლნ. ლარი)",
+    measurement: "მლნ. ლარი",
   },
   "დასაქმებულთა რაოდენობა სქესის მიხედვით": {
     "1para": {
@@ -273,7 +273,7 @@ const numIntervals = {
       num: [100001],
       color: "#8f0a0a",
     },
-    measurement: "(კაცი)",
+    measurement: "კაცი",
   },
   "შრომის ანაზღაურება სქესის მიხედვით": {
     "1para": {
@@ -296,7 +296,7 @@ const numIntervals = {
       num: [1501],
       color: "#5d2c70",
     },
-    measurement: "(ლარი)",
+    measurement: "ლარი",
   },
 };
 

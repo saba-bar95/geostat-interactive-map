@@ -17,11 +17,20 @@
     align-self: normal;
     font-size: 14px;
 
+    .header-gender {
+      margin-right: 15px;
+    }
+
     .header {
       display: flex;
       justify-content: space-between;
       color: #555;
       font-weight: 900;
+
+      .genders {
+        display: flex;
+        gap: 25px;
+      }
     }
 
     .regions {
@@ -34,6 +43,15 @@
         display: flex;
         justify-content: space-between;
         color: #555;
+
+        .numbers {
+          display: flex;
+          gap: 10px;
+
+          p {
+            min-width: 50px;
+          }
+        }
 
         .icon {
           width: 12px;
