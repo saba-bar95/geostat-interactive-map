@@ -5,13 +5,13 @@ import queries from "./components/Navigation/queries";
 import { useState, createContext, useEffect } from "react";
 import ColorBox from "./components/ColorBox/ColorBox";
 import getBrunva from "./functions/fetchFunctions/getBrunva";
+import LanguageChanger from "./components/LanguageChanger/LanguageChanger";
 
 export const QueriesContext = createContext();
 
 function App() {
   const initialIndicator = "ბრუნვა";
   const initialIndicatorYear = 2022;
-
   const [selectedQuery, setSelectedQuery] = useState(queries[0]);
   const [selectedLink, setSelectedLink] = useState(null);
   const [regData, setRegData] = useState(null);
@@ -73,6 +73,7 @@ function App() {
           <MapComponent />
         </div>
         <ColorBox />
+        <LanguageChanger />
       </div>
     </QueriesContext.Provider>
   );
