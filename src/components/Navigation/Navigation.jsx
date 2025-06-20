@@ -3,6 +3,7 @@ import { useContext } from "react";
 import queries from "./queries";
 import { QueriesContext } from "../../App";
 import Context from "../Context/Context";
+import { useParams } from "react-router";
 
 const Navigation = () => {
   const {
@@ -12,6 +13,10 @@ const Navigation = () => {
     handleSelectLink,
     closeSidebar,
   } = useContext(QueriesContext);
+
+  const { language } = useParams();
+
+  const field = language === "ge" ? "დარგი" : "Field";
 
   return (
     <div className="navigation">
@@ -23,11 +28,12 @@ const Navigation = () => {
                 key={i}
                 onClick={() => handleSelectLink(el)}
                 className={
-                  selectedLink && selectedLink.name === el.name
+                  selectedLink &&
+                  selectedLink[`name_${language}`] === el[`name_${language}`]
                     ? "selected"
                     : ""
                 }
-                title={el.name}>
+                title={el[`name_${language}`]}>
                 <a role="tab">
                   <i
                     className={`fa fa-${
@@ -48,14 +54,13 @@ const Navigation = () => {
             );
           })}
         </ul>
-
         {selectedLink !== null && (
           <div className="sidebar">
             <div className="upper">
               <h2>
                 {selectedLink.href === "menu"
-                  ? `დარგი - ${selectedLink.name}`
-                  : selectedLink.name}
+                  ? `${field} - ${selectedLink[`name_${language}`]}`
+                  : selectedLink[`name_${language}`]}
               </h2>
               <span
                 className="sidebar-close"
@@ -68,14 +73,15 @@ const Navigation = () => {
             {selectedLink.href === "menu" && (
               <ul>
                 {queries.map((el, i) =>
-                  el.title !== selectedQuery.title ? (
+                  el[`title_${language}`] !==
+                  selectedQuery[`title_${language}`] ? (
                     <li
                       key={i}
                       onClick={() => {
                         handleSelectQuery(el);
                         handleSelectLink(el.links[0]);
                       }}>
-                      {el.title}
+                      {el[`title_${language}`]}
                     </li>
                   ) : null
                 )}

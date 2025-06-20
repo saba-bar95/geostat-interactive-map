@@ -4,6 +4,8 @@ import BusinessIndicator from "./Contexts/BusinessStatistics/Indicator/BusinessI
 import BusinessDiagram from "./Contexts/BusinessStatistics/BusinessDiagram/BusinessDiagram";
 import BusinessHistogram from "./Contexts/BusinessStatistics/BusinessHistogram/BusinessHistogram";
 import FindBusinessEntity from "./Contexts/BusinessStatistics/FindBusinessEntity/FindBusinessEntity";
+import queries from "../Navigation/queries";
+import { useParams } from "react-router";
 
 const componentMap = {
   home: BusinessIndicator,
@@ -15,7 +17,9 @@ const componentMap = {
 const Context = () => {
   const { selectedQuery, selectedLink } = useContext(QueriesContext);
 
-  if (selectedQuery.title !== "ბიზნეს სტატისტიკა") {
+  const { language } = useParams();
+
+  if (selectedQuery[`title_${language}`] !== queries[0][`title_${language}`]) {
     return null; // or some fallback component
   }
 
