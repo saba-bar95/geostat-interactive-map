@@ -20,6 +20,7 @@ import markers from "../../coordinates/markers";
 import { QueriesContext } from "../../App";
 import numIntervals from "../ColorBox/numIntervals";
 import checkNumberRange from "../../functions/checkNumberRange";
+import { useParams } from "react-router";
 
 const MapComponent = () => {
   const [zoomLevel, setZoomLevel] = useState(8);
@@ -28,6 +29,8 @@ const MapComponent = () => {
   const { regData, munData, indicator, indicatorYear } =
     useContext(QueriesContext);
   const indicatorInfo = numIntervals[indicator];
+
+  const { language } = useParams();
 
   return (
     <>
@@ -100,7 +103,7 @@ const MapComponent = () => {
                   onEachFeature(feature, layer);
                 }}>
                 <Popup>
-                  <p className="popup-para">{key}</p>
+                  <p className="popup-para">{region[`name_${language}`]}</p>
 
                   {typeof regionNumber === "number" &&
                     value.id !== "12" &&
@@ -128,6 +131,7 @@ const MapComponent = () => {
               </GeoJSON>
             );
           })}
+
         {munData &&
           zoomLevel > 8 &&
           municipalities.features.map((el) => {
@@ -140,6 +144,7 @@ const MapComponent = () => {
 
             const munColor = checkNumberRange(munNumber, indicatorInfo);
 
+            console.log(el);
             return (
               <GeoJSON
                 key={el.properties.NAME_GE}
@@ -149,7 +154,11 @@ const MapComponent = () => {
                   onEachFeature(feature, layer);
                 }}>
                 <Popup>
-                  <p className="popup-para">{el.properties.NAME_SYLFA}</p>
+                  <p className="popup-para">
+                    {language === "ge"
+                      ? el.properties.NAME_SYLFA
+                      : el.properties.NAME_EN}
+                  </p>
                   <p className="popup-para">{indicator}</p>
                   <p>
                     {typeof munNumber === "number"

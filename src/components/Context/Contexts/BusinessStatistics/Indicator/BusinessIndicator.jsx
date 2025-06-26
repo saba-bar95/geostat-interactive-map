@@ -12,6 +12,7 @@ import municipalities from "../../../../../coordinates/municipalities";
 import getEmployed from "../../../../../functions/fetchFunctions/getEmployed";
 import getEmployees from "../../../../../functions/fetchFunctions/getEmployees";
 import getPayGender from "../../../../../functions/fetchFunctions/getPayGender";
+import { useParams } from "react-router";
 
 const BusinessIndicator = () => {
   const {
@@ -24,6 +25,10 @@ const BusinessIndicator = () => {
     indicator,
     indicatorYear,
   } = useContext(QueriesContext);
+
+  const { language } = useParams();
+
+  console.log(indicator);
 
   const indicatorInfo = numIntervals[indicator].measurement;
   const isByGender =
@@ -153,7 +158,7 @@ const BusinessIndicator = () => {
           name="indicatorSelect"
           id="indicator"
           onChange={handleIndicatorChanger}>
-          {indicators.map((el) => {
+          {indicators[language].map((el) => {
             return <option key={el}>{el}</option>;
           })}
         </select>

@@ -6,10 +6,16 @@ import { useState, createContext, useEffect } from "react";
 import ColorBox from "./components/ColorBox/ColorBox";
 import getBrunva from "./functions/fetchFunctions/getBrunva";
 import LanguageChanger from "./components/LanguageChanger/LanguageChanger";
+import indicators from "./components/Context/Contexts/BusinessStatistics/Indicator/indicators";
+import { useParams } from "react-router";
 
 export const QueriesContext = createContext();
 
 function App() {
+  const { language } = useParams();
+
+  console.log(indicators[`${language}`][0]);
+
   const initialIndicator = "ბრუნვა";
   const initialIndicatorYear = 2022;
   const [selectedQuery, setSelectedQuery] = useState(queries[0]);
@@ -33,7 +39,7 @@ function App() {
 
   useEffect(() => {
     const getData = async () => {
-      const fetchedData = await getBrunva("Reg", 2022); // Call the utility function
+      const fetchedData = await getBrunva("Reg", indicatorYear); // Call the utility function
       if (fetchedData) {
         setRegData(fetchedData); // Set the fetched data to state
       }
