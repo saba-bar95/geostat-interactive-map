@@ -1,40 +1,36 @@
 import "./BusinessIndicator.scss";
-import indicators from "./indicators";
 import years from "./years";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useMemo } from "react";
+import { useParams } from "react-router";
 import { QueriesContext } from "../../../../../App";
-import numIntervals from "../../../../ColorBox/numIntervals";
 import AngleRight from "./AngleRight";
 import AngleDown from "./AngleDown";
-import getBrunva from "../../../../../functions/fetchFunctions/getBrunva";
-import getValAdded from "../../../../../functions/fetchFunctions/getValAdded";
 import municipalities from "../../../../../coordinates/municipalities";
-import getEmployed from "../../../../../functions/fetchFunctions/getEmployed";
-import getEmployees from "../../../../../functions/fetchFunctions/getEmployees";
-import getPayGender from "../../../../../functions/fetchFunctions/getPayGender";
-import { useParams } from "react-router";
+import fetchData from "../../../../../functions/fetchData";
+import fetchPayGender from "../../../../../functions/fetchPayGender";
 
 const BusinessIndicator = () => {
   const {
     setRegData,
     setMunData,
-    setIndicator,
     setIndicatorYear,
     regData,
     munData,
+    indicators,
     indicator,
+    indicatorInfo,
     indicatorYear,
+    setIndicator,
+    setIndicatorIndex,
   } = useContext(QueriesContext);
 
   const { language } = useParams();
 
-  console.log(indicator);
+  const [isMunOpen, setIsMunOpen] = useState(null);
 
-  const indicatorInfo = numIntervals[indicator].measurement;
   const isByGender =
     indicator === indicators[12] || indicator === indicators[11];
   const [selectedRegionId, setSelectedRegionId] = useState(null);
-  const [loading, setLoading] = useState(false);
   let sortedMuns;
 
   const sortedByGender = regData
@@ -50,143 +46,111 @@ const BusinessIndicator = () => {
     .sort((a, b) => b[`w_${indicatorYear}`] - a[`w_${indicatorYear}`]); // Sort in descending order
 
   const handleIndicatorChanger = (e) => {
-    setLoading(true);
+    const selected = e.target.value;
+    const index = indicators.indexOf(selected);
+    setIndicatorIndex(index);
     setIndicator(e.target.value);
   };
 
   const handleYearChange = (e) => {
-    const year = e.target.value.split(" ")[0];
-    setLoading(true);
+    const year = Number(e.target.value.split(" ")[0]);
     setIndicatorYear(year);
   };
 
+  const indicatorMap = useMemo(
+    () => ({
+      [indicators[0]]: "Brunva",
+      [indicators[1]]: "ValAdded",
+      [indicators[2]]: "Employed",
+      [indicators[3]]: "Employees",
+      [indicators[4]]: "Resale",
+      [indicators[5]]: "Investment",
+      [indicators[6]]: "ProdVal",
+      [indicators[7]]: "Purchases",
+      [indicators[8]]: "Remuneration",
+      [indicators[9]]: "Costs",
+      [indicators[10]]: "IntConsumption",
+      [indicators[11]]: "RegEmployeesGender",
+      [indicators[12]]: "PayGender",
+    }),
+    [indicators]
+  );
+
   useEffect(() => {
-    const fetchPayGender = async (type, year) => {
-      const fetchedData = await getPayGender(type, year); // For "შრომის ანაზღაურება სქესის მიხედვით"
-      if (fetchedData) {
-        setRegData(fetchedData);
+    const runFetch = async () => {
+      const indicatorKey = indicatorMap[indicator];
+      if (!indicatorKey) return;
+
+      // Special case for indicator[12] (gender pay)
+      if (indicator === indicators[12] || indicator === indicators[11]) {
+        const regDataRes = await fetchPayGender(indicatorKey, indicatorYear);
+        console.log(regDataRes);
+        if (regDataRes) setRegData(regDataRes);
+        setMunData(null);
+        return;
       }
-      setLoading(false);
+
+      const shouldFetchMun = indicatorYear > 2013;
+      const regScale = indicator === indicators[1] ? "" : "Reg";
+
+      const [regRes, munRes] = await Promise.all([
+        fetchData(indicatorKey, regScale, indicatorYear),
+        shouldFetchMun ? fetchData(indicatorKey, "Mun", indicatorYear) : null,
+      ]);
+
+      if (regRes) setRegData(regRes);
+      if (munRes) setMunData(munRes);
     };
 
-    const fetchEmployeesData = async (type, year) => {
-      const fetchedData = await getEmployees(type, year); // For "დაქირავებულთა ღირებულება"
-      if (fetchedData) {
-        if (type === "Reg") {
-          setRegData(fetchedData);
-        } else {
-          setMunData(fetchedData);
-        }
-      }
-      setLoading(false);
-    };
-
-    const fetchEmployedData = async (type, year) => {
-      const fetchedData = await getEmployed(type, year); // For "დაქირავებულთა ღირებულება"
-      if (fetchedData) {
-        if (type === "Reg") {
-          setRegData(fetchedData);
-        } else {
-          setMunData(fetchedData);
-        }
-      }
-      setLoading(false);
-    };
-
-    const fetchValAddedData = async (type, year) => {
-      const fetchedData = await getValAdded(type, year); // For "დამატებული ღირებულება"
-      if (fetchedData) {
-        if (type === "") {
-          setRegData(fetchedData);
-        } else {
-          setMunData(fetchedData);
-        }
-      }
-      setLoading(false);
-    };
-
-    const fetchTurnoverData = async (type, year) => {
-      const fetchedData = await getBrunva(type, year); // For "ბრუნვა"
-      if (fetchedData) {
-        if (type === "Reg") {
-          setRegData(fetchedData);
-        } else {
-          setMunData(fetchedData);
-        }
-      }
-      setLoading(false);
-    };
-
-    if (indicator === indicators[12]) {
-      fetchPayGender(indicatorYear);
-      setMunData(null);
-    }
-
-    if (indicator === indicators[3]) {
-      if (indicatorYear > 2013) {
-        fetchEmployeesData("Mun", indicatorYear);
-      }
-      fetchEmployeesData("Reg", indicatorYear);
-    }
-
-    if (indicator === indicators[2]) {
-      if (indicatorYear > 2013) {
-        fetchEmployedData("Mun", indicatorYear);
-      }
-      fetchEmployedData("Reg", indicatorYear);
-    }
-
-    if (indicator === indicators[1]) {
-      if (indicatorYear > 2013) {
-        fetchValAddedData("Mun", indicatorYear);
-      }
-      fetchValAddedData("", indicatorYear);
-    }
-
-    if (indicator === indicators[0]) {
-      if (indicatorYear > 2013) {
-        fetchTurnoverData("Mun", indicatorYear);
-      }
-      fetchTurnoverData("Reg", indicatorYear);
-    }
-  }, [indicatorYear, setMunData, setRegData, indicator]);
+    runFetch();
+  }, [
+    indicatorYear,
+    indicator,
+    indicatorMap,
+    indicators,
+    setRegData,
+    setMunData,
+  ]);
 
   return (
     <div className="business-indicator">
       <div className="container">
         <select
+          value={indicator}
           name="indicatorSelect"
           id="indicator"
           onChange={handleIndicatorChanger}>
-          {indicators[language].map((el) => {
+          {indicators.map((el) => {
             return <option key={el}>{el}</option>;
           })}
         </select>
       </div>
       <div className="container">
-        <select name="yearSelect" id="year" onChange={handleYearChange}>
-          {years.map((el) => {
-            return (
-              <option
-                key={el}
-                selected={el === 2022}
-                disabled={
-                  (indicator === indicators[1] || isByGender) && el < 2007
-                }>
-                {el} წელი
-              </option>
-            );
-          })}
+        <select
+          name="yearSelect"
+          id="year"
+          value={indicatorYear}
+          onChange={handleYearChange}>
+          {years.map((el) => (
+            <option
+              key={el}
+              value={el}
+              disabled={
+                (indicator === indicators[1] || isByGender) && el < 2007
+              }>
+              {el} {language === "en" ? "Year" : "წელი"}
+            </option>
+          ))}
         </select>
       </div>
 
-      {!loading && isByGender && (
+      {isByGender && (
         <div className="container regions-container">
           <div className="header header-gender">
-            <p>რეგიონი</p>
+            <p>{language === "en" ? "Region" : "რეგიონი"}</p>
             <div className="genders">
-              <p>ქალი</p>
-              <p>კაცი</p>
+              <p>{language === "en" ? "Female" : "ქალი"}</p>
+              <p>{language === "en" ? "Male" : "კაცი"}</p>
             </div>
           </div>
           <div className="regions">
@@ -215,11 +179,11 @@ const BusinessIndicator = () => {
         </div>
       )}
 
-      {!loading && !isByGender && (
+      {!isByGender && (
         <div className="container regions-container">
           <div className="header">
-            <p>რეგიონი</p>
-            <p>{indicatorInfo}</p>
+            <p>{language === "en" ? "Region" : "რეგიონი"}</p>
+            <p>{indicatorInfo && indicatorInfo[`measurement_${language}`]}</p>
           </div>
           <div className="regions">
             {sortedRegions.map((region) => {
@@ -239,25 +203,27 @@ const BusinessIndicator = () => {
               return (
                 <div className="wrapper" key={regId}>
                   <div
-                    className={`paras ${regId === "11" ? "paras-tbilisi" : ""}`} // Add conditional class here
+                    className={"paras"} // Add conditional class here
                     onClick={() => {
                       if (regId === selectedRegionId) setSelectedRegionId(null);
                       else setSelectedRegionId(regId); // Set the selected region ID
-                    }}>
+                      setIsMunOpen((prev) => (prev === regId ? null : regId));
+                    }}
+                    style={
+                      indicatorYear > 2013 && regId === "11"
+                        ? { marginLeft: "23px" }
+                        : undefined
+                    }>
                     {region[`w_${indicatorYear}`] > 0 && (
                       <>
                         <p>
                           {regId === "11" ? null : selectedRegionId ===
                             regId ? (
-                            <>
-                              <AngleDown />
-                            </>
+                            <>{indicatorYear > 2013 && <AngleDown />}</>
                           ) : (
-                            <>
-                              <AngleRight />
-                            </>
+                            <>{indicatorYear > 2013 && <AngleRight />}</>
                           )}
-                          {region.name_ge}
+                          {region[`name_${language}`]}
                         </p>
                         <p>
                           {typeof region[`w_${indicatorYear}`] === "number"
@@ -267,29 +233,38 @@ const BusinessIndicator = () => {
                       </>
                     )}
                   </div>
-                  {indicatorYear > 2013 &&
+                  {isMunOpen &&
+                    indicatorYear > 2013 &&
                     selectedRegionId === regId &&
                     regId !== "11" && (
                       <div className="mun-container">
-                        {sortedMuns.map((mun) => {
-                          const name = municipalities.features
-                            .filter(
-                              (mun1) =>
-                                mun1.properties.MUNICIPAL1 === mun.municipal_
-                            )
-                            .map((mun2) => mun2.properties.NAME_SYLFA);
+                        {sortedMuns
+                          .sort((a, b) => b.value - a.value)
+                          .map((mun) => {
+                            const name = municipalities.features
+                              .filter(
+                                (mun1) =>
+                                  mun1.properties.MUNICIPAL1 === mun.municipal_
+                              )
+                              .map((mun2) =>
+                                language === "en"
+                                  ? mun2.properties.NAME_EN
+                                  : mun2.properties.NAME_SYLFA
+                              );
 
-                          return (
-                            <div className="mun-paras" key={mun.municipal_}>
-                              <p>{name}</p>
-                              <p>
-                                {typeof mun[`w_${indicatorYear}`] === "number"
-                                  ? mun[`w_${indicatorYear}`].toFixed(1)
-                                  : mun[`w_${indicatorYear}`]}
-                              </p>
-                            </div>
-                          );
-                        })}
+                            return (
+                              <div className="mun-paras" key={mun.municipal_}>
+                                <p>{name}</p>
+                                <p>
+                                  {typeof mun[`w_${indicatorYear}`] === "number"
+                                    ? mun[`w_${indicatorYear}`].toFixed(1)
+                                    : typeof mun.value === "number"
+                                    ? mun.value.toFixed(1)
+                                    : "N/A"}
+                                </p>
+                              </div>
+                            );
+                          })}
                       </div>
                     )}
                 </div>
