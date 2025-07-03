@@ -1,9 +1,9 @@
-import backEndUrl from "../../BackEndUrl.jsx";
+import backEndUrl from "../BackEndUrl";
 
-const getValAdded = async (scale, year) => {
+const fetchData = async (indicator, scale, year) => {
   try {
     const response = await fetch(
-      `${backEndUrl}/api/get${scale}ValAdded?year=${year}`
+      `${backEndUrl}/api/get${scale}${indicator}?year=${year}`
     );
 
     if (!response.ok) {
@@ -18,4 +18,4 @@ const getValAdded = async (scale, year) => {
   }
 };
 
-export default getValAdded;
+export default fetchData;
