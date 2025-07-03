@@ -1,8 +1,8 @@
 import "./ColorBox.scss";
 import { useContext } from "react";
 import { QueriesContext } from "../../App";
-import numIntervals from "./numIntervals";
 import styled from "styled-components";
+import { useParams } from "react-router";
 
 const Span = styled.span`
   background-color: ${(props) =>
@@ -13,13 +13,13 @@ const Span = styled.span`
 `;
 
 const ColorBox = () => {
-  const { indicator } = useContext(QueriesContext);
-  const indicatorInfo = numIntervals[indicator];
+  const { language } = useParams();
+  const { indicator, indicatorInfo } = useContext(QueriesContext);
 
   return (
     <div className="colorbox-container">
       <h1>
-        {indicator} ({indicatorInfo.measurement})
+        {indicator} ({indicatorInfo[`measurement_${language}`]})
       </h1>
       <div className="para-container">
         <p>
