@@ -2,34 +2,32 @@ import {
   MapContainer,
   TileLayer,
   Popup,
-  Marker,
+  // Marker,
   LayersControl,
   GeoJSON,
 } from "react-leaflet";
 import { useState, useContext } from "react";
 import "leaflet/dist/leaflet.css";
 import "./MapComponent.scss";
-import MarkerClusterGroup from "react-leaflet-markercluster";
 import regions from "../../coordinates/regions";
 import municipalities from "../../coordinates/municipalities";
 import getStyle from "../../functions/getStyle";
 import onEachFeature from "../../functions/onEachFeature";
-import createCustomClusterIcon from "../../functions/createCustomClusterIcon";
 import MapEventsHandler from "../../functions/MapEventsHandler";
-import markers from "../../coordinates/markers";
 import { QueriesContext } from "../../App";
-import numIntervals from "../ColorBox/numIntervals";
 import checkNumberRange from "../../functions/checkNumberRange";
 import { useParams } from "react-router";
+
+// import MarkerClusterGroup from "react-leaflet-markercluster";
+// import createCustomClusterIcon from "../../functions/createCustomClusterIcon";
+// import markers from "../../coordinates/markers";
 
 const MapComponent = () => {
   const [zoomLevel, setZoomLevel] = useState(8);
   const center = [41.9, 43.9];
 
-  const { regData, munData, indicator, indicatorYear } =
+  const { regData, munData, indicator, indicatorYear, indicatorInfo } =
     useContext(QueriesContext);
-  const indicatorInfo = numIntervals[indicator];
-
   const { language } = useParams();
 
   return (
@@ -72,21 +70,21 @@ const MapComponent = () => {
             </LayersControl.BaseLayer>
           </LayersControl.BaseLayer>
         </LayersControl>
-
-        <MarkerClusterGroup iconCreateFunction={createCustomClusterIcon}>
+        {/* <MarkerClusterGroup iconCreateFunction={createCustomClusterIcon}>
           {markers.map((marker, index) => (
             <Marker key={index} position={marker.geocode}>
               <Popup>{marker.popupText}</Popup>
             </Marker>
           ))}
-        </MarkerClusterGroup>
+        </MarkerClusterGroup> */}
 
         {regData &&
           Object.entries(regions).map(([key, value]) => {
             const region = regData.find(
               (region) =>
                 +region.region_id === +value.id ||
-                region.REGION_ID === +value.id
+                region.REGION_ID === +value.id ||
+                region.municipal_ === +value.id
             );
 
             const regionNumber = region ? region[`w_${indicatorYear}`] : 0; // Default to "N/A" if not found
@@ -111,20 +109,33 @@ const MapComponent = () => {
                       <>
                         <p className="popup-para">{indicator}</p>
                         <p>
-                          {regionNumber.toFixed(1)} ({indicatorInfo.measurement}
-                          ){" "}
+                          {regionNumber.toFixed(1)} (
+                          {indicatorInfo[`measurement_${language}`]}){" "}
                         </p>
                       </>
                     )}
 
                   {regionFemaleNumber && (
-                    <p>
-                      ქალი: {regionFemaleNumber} ({indicatorInfo.measurement}){" "}
-                    </p>
+                    <>
+                      <p className="popup-para">{region[`NAME_GE`]}</p>
+
+                      <p className="popup-para">{indicator}</p>
+                      <p>
+                        <span style={{ fontWeight: 900 }}>
+                          {language === "en" ? "Female" : "ქალი"}
+                        </span>
+                        : {regionFemaleNumber} (
+                        {indicatorInfo[`measurement_${language}`]}){" "}
+                      </p>
+                    </>
                   )}
                   {regionMaleNumber && (
                     <p>
-                      კაცი: {regionMaleNumber} ({indicatorInfo.measurement})
+                      <span style={{ fontWeight: 900 }}>
+                        {language === "en" ? "Male" : "კაცი"}
+                      </span>
+                      : {regionMaleNumber} (
+                      {indicatorInfo[`measurement_${language}`]})
                     </p>
                   )}
                 </Popup>
@@ -133,18 +144,20 @@ const MapComponent = () => {
           })}
 
         {munData &&
+          indicatorYear > 2013 &&
           zoomLevel > 8 &&
           municipalities.features.map((el) => {
             const municipality = munData.find(
               (mun) => mun.municipal_ === el.properties.MUNICIPAL1
             );
-            const munNumber = municipality
-              ? municipality[`w_${indicatorYear}`]
-              : "N/A";
+
+            const munNumber =
+              municipality?.value ??
+              municipality?.[`w_${indicatorYear}`] ??
+              "N/A";
 
             const munColor = checkNumberRange(munNumber, indicatorInfo);
 
-            console.log(el);
             return (
               <GeoJSON
                 key={el.properties.NAME_GE}
@@ -164,7 +177,7 @@ const MapComponent = () => {
                     {typeof munNumber === "number"
                       ? munNumber.toFixed(1)
                       : munNumber}{" "}
-                    (მლნ. ლარი)
+                    {indicatorInfo[`measurement_${language}`]}
                   </p>
                 </Popup>
               </GeoJSON>
