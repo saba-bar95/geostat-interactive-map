@@ -6,24 +6,36 @@ import { useState, createContext, useEffect } from "react";
 import ColorBox from "./components/ColorBox/ColorBox";
 import getBrunva from "./functions/fetchFunctions/getBrunva";
 import LanguageChanger from "./components/LanguageChanger/LanguageChanger";
-import indicators from "./components/Context/Contexts/BusinessStatistics/Indicator/indicators";
 import { useParams } from "react-router";
+import getIndicators from "./functions/getIndicators";
+import getIntervals from "./functions/getIntervals";
 
 export const QueriesContext = createContext();
 
 function App() {
   const { language } = useParams();
 
-  console.log(indicators[`${language}`][0]);
-
-  const initialIndicator = "ბრუნვა";
-  const initialIndicatorYear = 2022;
   const [selectedQuery, setSelectedQuery] = useState(queries[0]);
   const [selectedLink, setSelectedLink] = useState(null);
   const [regData, setRegData] = useState(null);
   const [munData, setMunData] = useState(null);
-  const [indicator, setIndicator] = useState(initialIndicator);
-  const [indicatorYear, setIndicatorYear] = useState(initialIndicatorYear);
+  const [indicatorYear, setIndicatorYear] = useState(2022);
+  const [indicators, setIndicators] = useState(() => getIndicators(language));
+  const [indicatorIndex, setIndicatorIndex] = useState(0);
+  const [indicator, setIndicator] = useState(
+    () => getIndicators(language)[indicatorIndex]
+  );
+  const [indicatorInfo, setIndicatorInfo] = useState(
+    () => getIntervals(language)[getIndicators(language)[indicatorIndex]]
+  );
+
+  useEffect(() => {
+    const newIndicators = getIndicators(language);
+    setIndicators(newIndicators);
+    const clampedIndex = Math.min(indicatorIndex, newIndicators.length - 1);
+    setIndicator(newIndicators[clampedIndex]);
+    setIndicatorInfo(getIntervals(language)[newIndicators[clampedIndex]]);
+  }, [language, indicatorIndex]);
 
   const handleSelectQuery = (el) => {
     setSelectedQuery(el);
@@ -39,7 +51,7 @@ function App() {
 
   useEffect(() => {
     const getData = async () => {
-      const fetchedData = await getBrunva("Reg", indicatorYear); // Call the utility function
+      const fetchedData = await getBrunva("Reg", 2022); // Call the utility function
       if (fetchedData) {
         setRegData(fetchedData); // Set the fetched data to state
       }
@@ -61,17 +73,20 @@ function App() {
       value={{
         selectedQuery,
         selectedLink,
-        indicator,
         indicatorYear,
         closeSidebar,
         regData,
         munData,
         setRegData,
         setMunData,
-        setIndicator,
         setIndicatorYear,
         handleSelectLink,
         handleSelectQuery,
+        indicators,
+        indicator,
+        indicatorInfo,
+        setIndicator,
+        setIndicatorIndex,
       }}>
       <div className="app-container">
         <Navigation />
