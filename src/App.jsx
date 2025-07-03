@@ -4,11 +4,11 @@ import Navigation from "./components/Navigation/Navigation";
 import queries from "./components/Navigation/queries";
 import { useState, createContext, useEffect } from "react";
 import ColorBox from "./components/ColorBox/ColorBox";
-import getBrunva from "./functions/fetchFunctions/getBrunva";
 import LanguageChanger from "./components/LanguageChanger/LanguageChanger";
 import { useParams } from "react-router";
 import getIndicators from "./functions/getIndicators";
 import getIntervals from "./functions/getIntervals";
+import fetchData from "./functions/fetchData";
 
 export const QueriesContext = createContext();
 
@@ -50,23 +50,18 @@ function App() {
   };
 
   useEffect(() => {
-    const getData = async () => {
-      const fetchedData = await getBrunva("Reg", 2022); // Call the utility function
-      if (fetchedData) {
-        setRegData(fetchedData); // Set the fetched data to state
-      }
+    const fetchAllData = async () => {
+      const [regDataRes, munDataRes] = await Promise.all([
+        fetchData("Brunva", "Reg", 2022),
+        fetchData("Brunva", "Mun", 2022),
+      ]);
+
+      if (regDataRes) setRegData(regDataRes);
+      if (munDataRes) setMunData(munDataRes);
     };
 
-    const getMunData = async () => {
-      const fetchedData = await getBrunva("Mun", 2022); // Call the utility function
-      if (fetchedData) {
-        setMunData(fetchedData);
-      }
-    };
-
-    getMunData();
-    getData(); // Call the fetch function
-  }, []); // Empty dependency array means this runs once when the component mounts
+    fetchAllData();
+  }, []);
 
   return (
     <QueriesContext.Provider
