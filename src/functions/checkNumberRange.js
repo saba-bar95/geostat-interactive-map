@@ -22,7 +22,7 @@ const checkNumberRange = (number, data) => {
           }
         } else if (range.length === 1) {
           // Check if the number is equal to the single number
-          if (number === range[0]) {
+          if (number >= range[0]) {
             return color; // Return color if equal to single number
           }
         }
