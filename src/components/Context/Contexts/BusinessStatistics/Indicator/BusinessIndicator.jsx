@@ -49,7 +49,35 @@ const BusinessIndicator = () => {
     const selected = e.target.value;
     const index = indicators.indexOf(selected);
     setIndicatorIndex(index);
-    setIndicator(e.target.value);
+    setIndicator(selected);
+
+    const minYear = getMinValidYear(selected);
+    if (indicatorYear < minYear) {
+      setIndicatorYear(minYear);
+    }
+  };
+
+  const getMinValidYear = (indicator) => {
+    if (
+      indicator === indicators[10] ||
+      indicator === indicators[1] ||
+      indicator === indicators[2]
+    )
+      return 2006;
+
+    if (indicator === indicators[11]) return 2005;
+
+    if (
+      indicator === indicators[12] ||
+      indicator === indicators[11] ||
+      indicator === indicators[4] ||
+      indicator === indicators[5] ||
+      indicator === indicators[7] ||
+      indicator === indicators[9]
+    ) {
+      return 2007;
+    }
+    return Math.min(...years); // fallback to earliest year
   };
 
   const handleYearChange = (e) => {
@@ -136,7 +164,17 @@ const BusinessIndicator = () => {
               key={el}
               value={el}
               disabled={
-                (indicator === indicators[1] || isByGender) && el < 2007
+                (indicator === indicators[11] && el < 2005) ||
+                ((indicator === indicators[10] ||
+                  indicator === indicators[1] ||
+                  indicator === indicators[2]) &&
+                  el < 2006) ||
+                ((isByGender ||
+                  indicator === indicators[4] ||
+                  indicator === indicators[5] ||
+                  indicator === indicators[7] ||
+                  indicator === indicators[9]) &&
+                  el < 2007)
               }>
               {el} {language === "en" ? "Year" : "წელი"}
             </option>
