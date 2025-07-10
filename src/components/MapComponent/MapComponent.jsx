@@ -111,7 +111,10 @@ const MapComponent = () => {
                   : parseFloat(regionMaleRaw.toFixed(1))
                 : null;
 
-            const regColor = checkNumberRange(regionNumber, indicatorInfo);
+            const regColor =
+              indicator === indicators[11] || indicator === indicators[12]
+                ? checkNumberRange(regionMaleNumber, indicatorInfo)
+                : checkNumberRange(regionNumber, indicatorInfo);
 
             return (
               <GeoJSON
@@ -143,7 +146,7 @@ const MapComponent = () => {
                       <p className="popup-para">{indicator}</p>
                       <p>
                         <span style={{ fontWeight: 900 }}>
-                          {language === "en" ? "Male" : "კაცი"}
+                          {language === "en" ? "Female" : "ქალი"}
                         </span>
                         : {regionFemaleNumber}
                         {indicator === indicators[12] && (
