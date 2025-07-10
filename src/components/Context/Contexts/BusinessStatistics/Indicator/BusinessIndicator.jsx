@@ -1,37 +1,30 @@
 import "./BusinessIndicator.scss";
-import years from "./years";
-import { useContext, useEffect, useState, useMemo } from "react";
+import { useContext, useState } from "react";
 import { useParams } from "react-router";
 import { QueriesContext } from "../../../../../App";
 import AngleRight from "./AngleRight";
 import AngleDown from "./AngleDown";
 import municipalities from "../../../../../coordinates/municipalities";
-import fetchData from "../../../../../functions/fetchData";
-import fetchPayGender from "../../../../../functions/fetchPayGender";
+import YearsSelect from "../YearsSelect";
+import IndicatorsSelect from "../IndicatorsSelect";
 
 const BusinessIndicator = () => {
   const {
-    setRegData,
-    setMunData,
-    setIndicatorYear,
     regData,
     munData,
     indicators,
     indicator,
     indicatorInfo,
     indicatorYear,
-    setIndicator,
-    setIndicatorIndex,
   } = useContext(QueriesContext);
 
   const { language } = useParams();
-
   const [isMunOpen, setIsMunOpen] = useState(null);
+  const [selectedRegionId, setSelectedRegionId] = useState(null);
 
+  let sortedMuns;
   const isByGender =
     indicator === indicators[12] || indicator === indicators[11];
-  const [selectedRegionId, setSelectedRegionId] = useState(null);
-  let sortedMuns;
 
   const sortedByGender = regData
     .filter(
@@ -45,139 +38,13 @@ const BusinessIndicator = () => {
     .filter((region) => region[`w_${indicatorYear}`] !== null) // Exclude regions with null values
     .sort((a, b) => b[`w_${indicatorYear}`] - a[`w_${indicatorYear}`]); // Sort in descending order
 
-  const handleIndicatorChanger = (e) => {
-    const selected = e.target.value;
-    const index = indicators.indexOf(selected);
-    setIndicatorIndex(index);
-    setIndicator(selected);
-
-    const minYear = getMinValidYear(selected);
-    if (indicatorYear < minYear) {
-      setIndicatorYear(minYear);
-    }
-  };
-
-  const getMinValidYear = (indicator) => {
-    if (
-      indicator === indicators[10] ||
-      indicator === indicators[1] ||
-      indicator === indicators[2] ||
-      indicator === indicators[9]
-    )
-      return 2006;
-
-    if (indicator === indicators[11]) return 2005;
-
-    if (
-      indicator === indicators[12] ||
-      indicator === indicators[11] ||
-      indicator === indicators[4] ||
-      indicator === indicators[5] ||
-      indicator === indicators[7]
-    ) {
-      return 2007;
-    }
-    return Math.min(...years); // fallback to earliest year
-  };
-
-  const handleYearChange = (e) => {
-    const year = Number(e.target.value.split(" ")[0]);
-    setIndicatorYear(year);
-  };
-
-  const indicatorMap = useMemo(
-    () => ({
-      [indicators[0]]: "Brunva",
-      [indicators[1]]: "ValAdded",
-      [indicators[2]]: "Employed",
-      [indicators[3]]: "Employees",
-      [indicators[4]]: "Resale",
-      [indicators[5]]: "Investment",
-      [indicators[6]]: "ProdVal",
-      [indicators[7]]: "Purchases",
-      [indicators[8]]: "Remuneration",
-      [indicators[9]]: "Costs",
-      [indicators[10]]: "IntConsumption",
-      [indicators[11]]: "RegEmployeesGender",
-      [indicators[12]]: "PayGender",
-    }),
-    [indicators]
-  );
-
-  useEffect(() => {
-    const runFetch = async () => {
-      const indicatorKey = indicatorMap[indicator];
-      if (!indicatorKey) return;
-
-      if (indicator === indicators[12] || indicator === indicators[11]) {
-        const regDataRes = await fetchPayGender(indicatorKey, indicatorYear);
-        if (regDataRes) setRegData(regDataRes);
-        setMunData(null);
-        return;
-      }
-
-      const shouldFetchMun = indicatorYear > 2013;
-      const regScale = indicator === indicators[1] ? "" : "Reg";
-
-      const [regRes, munRes] = await Promise.all([
-        fetchData(indicatorKey, regScale, indicatorYear),
-        shouldFetchMun ? fetchData(indicatorKey, "Mun", indicatorYear) : null,
-      ]);
-
-      if (regRes) setRegData(regRes);
-      if (munRes) setMunData(munRes);
-    };
-
-    runFetch();
-  }, [
-    indicatorYear,
-    indicator,
-    indicatorMap,
-    indicators,
-    setRegData,
-    setMunData,
-  ]);
-
   return (
     <div className="business-indicator">
       <div className="container">
-        <select
-          value={indicator}
-          name="indicatorSelect"
-          id="indicator"
-          onChange={handleIndicatorChanger}>
-          {indicators.map((el) => {
-            return <option key={el}>{el}</option>;
-          })}
-        </select>
+        <IndicatorsSelect />
       </div>
       <div className="container">
-        <select
-          name="yearSelect"
-          id="year"
-          value={indicatorYear}
-          onChange={handleYearChange}>
-          {years.map((el) => (
-            <option
-              key={el}
-              value={el}
-              disabled={
-                (indicator === indicators[11] && el < 2005) ||
-                ((indicator === indicators[10] ||
-                  indicator === indicators[9] ||
-                  indicator === indicators[1] ||
-                  indicator === indicators[2]) &&
-                  el < 2006) ||
-                ((isByGender ||
-                  indicator === indicators[4] ||
-                  indicator === indicators[5] ||
-                  indicator === indicators[7]) &&
-                  el < 2007)
-              }>
-              {el} {language === "en" ? "Year" : "წელი"}
-            </option>
-          ))}
-        </select>
+        <YearsSelect />
       </div>
 
       {isByGender && (
