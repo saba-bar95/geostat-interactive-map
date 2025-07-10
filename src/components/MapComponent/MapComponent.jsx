@@ -26,8 +26,14 @@ const MapComponent = () => {
   const [zoomLevel, setZoomLevel] = useState(8);
   const center = [41.9, 43.9];
 
-  const { regData, munData, indicator, indicatorYear, indicatorInfo } =
-    useContext(QueriesContext);
+  const {
+    regData,
+    munData,
+    indicator,
+    indicators,
+    indicatorYear,
+    indicatorInfo,
+  } = useContext(QueriesContext);
   const { language } = useParams();
 
   return (
@@ -87,9 +93,24 @@ const MapComponent = () => {
                 region.municipal_ === +value.id
             );
 
-            const regionNumber = region ? region[`w_${indicatorYear}`] : 0; // Default to "N/A" if not found
-            const regionFemaleNumber = region[`F_${indicatorYear}`] || null;
-            const regionMaleNumber = region[`M_${indicatorYear}`] || null;
+            const regionNumber = region ? region[`w_${indicatorYear}`] : 0;
+            const regionFemaleRaw = region[`f_${indicatorYear}`];
+            const regionMaleRaw = region[`m_${indicatorYear}`];
+
+            const regionFemaleNumber =
+              typeof regionFemaleRaw === "number"
+                ? indicator === indicators[11]
+                  ? Math.floor(regionFemaleRaw)
+                  : parseFloat(regionFemaleRaw.toFixed(1))
+                : null;
+
+            const regionMaleNumber =
+              typeof regionMaleRaw === "number"
+                ? indicator === indicators[11]
+                  ? Math.floor(regionMaleRaw)
+                  : parseFloat(regionMaleRaw.toFixed(1))
+                : null;
+
             const regColor = checkNumberRange(regionNumber, indicatorInfo);
 
             return (
@@ -122,10 +143,12 @@ const MapComponent = () => {
                       <p className="popup-para">{indicator}</p>
                       <p>
                         <span style={{ fontWeight: 900 }}>
-                          {language === "en" ? "Female" : "ქალი"}
+                          {language === "en" ? "Male" : "კაცი"}
                         </span>
-                        : {regionFemaleNumber} (
-                        {indicatorInfo[`measurement_${language}`]}){" "}
+                        : {regionFemaleNumber}
+                        {indicator === indicators[12] && (
+                          <> ({indicatorInfo[`measurement_${language}`]})</>
+                        )}
                       </p>
                     </>
                   )}
@@ -134,8 +157,10 @@ const MapComponent = () => {
                       <span style={{ fontWeight: 900 }}>
                         {language === "en" ? "Male" : "კაცი"}
                       </span>
-                      : {regionMaleNumber} (
-                      {indicatorInfo[`measurement_${language}`]})
+                      : {regionMaleNumber}
+                      {indicator === indicators[12] && (
+                        <> ({indicatorInfo[`measurement_${language}`]})</>
+                      )}
                     </p>
                   )}
                 </Popup>

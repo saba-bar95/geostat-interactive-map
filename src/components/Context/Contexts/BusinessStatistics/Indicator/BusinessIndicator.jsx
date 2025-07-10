@@ -36,10 +36,10 @@ const BusinessIndicator = () => {
   const sortedByGender = regData
     .filter(
       (region) =>
-        region[`F_${indicatorYear}`] !== 0 &&
-        region[`F_${indicatorYear}`] !== null
+        region[`f_${indicatorYear}`] !== 0 &&
+        region[`f_${indicatorYear}`] !== null
     )
-    .sort((a, b) => b[`F_${indicatorYear}`] - a[`F_${indicatorYear}`]);
+    .sort((a, b) => b[`f_${indicatorYear}`] - a[`f_${indicatorYear}`]);
 
   const sortedRegions = regData
     .filter((region) => region[`w_${indicatorYear}`] !== null) // Exclude regions with null values
@@ -61,7 +61,8 @@ const BusinessIndicator = () => {
     if (
       indicator === indicators[10] ||
       indicator === indicators[1] ||
-      indicator === indicators[2]
+      indicator === indicators[2] ||
+      indicator === indicators[9]
     )
       return 2006;
 
@@ -72,8 +73,7 @@ const BusinessIndicator = () => {
       indicator === indicators[11] ||
       indicator === indicators[4] ||
       indicator === indicators[5] ||
-      indicator === indicators[7] ||
-      indicator === indicators[9]
+      indicator === indicators[7]
     ) {
       return 2007;
     }
@@ -109,10 +109,8 @@ const BusinessIndicator = () => {
       const indicatorKey = indicatorMap[indicator];
       if (!indicatorKey) return;
 
-      // Special case for indicator[12] (gender pay)
       if (indicator === indicators[12] || indicator === indicators[11]) {
         const regDataRes = await fetchPayGender(indicatorKey, indicatorYear);
-        console.log(regDataRes);
         if (regDataRes) setRegData(regDataRes);
         setMunData(null);
         return;
@@ -166,14 +164,14 @@ const BusinessIndicator = () => {
               disabled={
                 (indicator === indicators[11] && el < 2005) ||
                 ((indicator === indicators[10] ||
+                  indicator === indicators[9] ||
                   indicator === indicators[1] ||
                   indicator === indicators[2]) &&
                   el < 2006) ||
                 ((isByGender ||
                   indicator === indicators[4] ||
                   indicator === indicators[5] ||
-                  indicator === indicators[7] ||
-                  indicator === indicators[9]) &&
+                  indicator === indicators[7]) &&
                   el < 2007)
               }>
               {el} {language === "en" ? "Year" : "წელი"}
@@ -193,21 +191,25 @@ const BusinessIndicator = () => {
           </div>
           <div className="regions">
             {sortedByGender.map((region) => {
-              const regId = region.REGION_ID;
-
+              const regId = region.region_id;
+              if (regId === 12) return null;
               return (
                 <div className="paras" key={regId}>
-                  {region.NAME_GE}
+                  <p>{region[`name_${language}`]}</p>
                   <div className="numbers">
                     <p>
-                      {typeof region[`F_${indicatorYear}`] === "number"
-                        ? region[`F_${indicatorYear}`].toFixed(1)
-                        : region[`F_${indicatorYear}`]}
+                      {typeof region[`f_${indicatorYear}`] === "number"
+                        ? indicator === indicators[11]
+                          ? Math.floor(region[`f_${indicatorYear}`])
+                          : region[`f_${indicatorYear}`].toFixed(1)
+                        : region[`f_${indicatorYear}`]}
                     </p>
                     <p>
-                      {typeof region[`M_${indicatorYear}`] === "number"
-                        ? region[`M_${indicatorYear}`].toFixed(1)
-                        : region[`M_${indicatorYear}`]}
+                      {typeof region[`m_${indicatorYear}`] === "number"
+                        ? indicator === indicators[11]
+                          ? Math.floor(region[`m_${indicatorYear}`])
+                          : region[`m_${indicatorYear}`].toFixed(1)
+                        : region[`m_${indicatorYear}`]}
                     </p>
                   </div>
                 </div>
