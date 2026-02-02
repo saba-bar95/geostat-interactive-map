@@ -15,9 +15,8 @@ import fetchRegionGenderData from "./functions/fetchRegionGenderData";
 import fetchCompaniesData from "./functions/fetchCompaniesData";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 import { Analytics } from "@vercel/analytics/react";
-
-// import fetchLegalForms from "./functions/fetchLegalForms";
-// import fetchActivities from "./functions/fetchActitivities";
+import fetchLegalForms from "./functions/fetchLegalForms";
+import fetchActivities from "./functions/fetchActitivities";
 
 export const QueriesContext = createContext();
 
@@ -31,10 +30,10 @@ function App() {
   const [indicators, setIndicators] = useState(() => getIndicators(language));
   const [indicatorIndex, setIndicatorIndex] = useState(0);
   const [indicator, setIndicator] = useState(
-    () => getIndicators(language)[indicatorIndex]
+    () => getIndicators(language)[indicatorIndex],
   );
   const [indicatorInfo, setIndicatorInfo] = useState(
-    () => getIntervals(language)[getIndicators(language)[indicatorIndex]]
+    () => getIntervals(language)[getIndicators(language)[indicatorIndex]],
   );
   const [selectedRegionID, setSelectedRegionID] = useState(11);
   const [selectedRegion, setSelectedRegion] = useState(null);
@@ -44,8 +43,8 @@ function App() {
   const [companiesData, setCompaniesData] = useState(null);
   const [isLoadingCompanies, setIsLoadingCompanies] = useState(false);
   const [selectedActivityID, setSelectedActivityID] = useState("");
-  // const [activities, setActivities] = useState("");
-  // const [legalForms, setLegalForms] = useState("");
+  const [activities, setActivities] = useState("");
+  const [legalForms, setLegalForms] = useState("");
 
   useEffect(() => {
     if (regData && selectedRegionID) {
@@ -72,7 +71,7 @@ function App() {
       [indicators[11]]: "RegEmployeesGender",
       [indicators[12]]: "PayGender",
     }),
-    [indicators]
+    [indicators],
   );
 
   const fetchYears = async (
@@ -81,7 +80,7 @@ function App() {
     regionID,
     startYear,
     endYear,
-    formatter
+    formatter,
   ) => {
     const results = [];
     for (let year = startYear; year <= endYear; year++) {
@@ -128,7 +127,7 @@ function App() {
         selectedRegionID,
         indicatorYear,
         2022,
-        formatter
+        formatter,
       );
 
       setYearlyRegionData(dataArray);
@@ -205,31 +204,31 @@ function App() {
     setMunData,
   ]);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const data = await fetchActivities(language);
-  //       if (data) setActivities(data);
-  //     } catch (err) {
-  //       console.error("Error fetching legal forms:", err);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchActivities(language);
+        if (data) setActivities(data);
+      } catch (err) {
+        console.error("Error fetching legal forms:", err);
+      }
+    };
 
-  //   fetchData();
-  // }, [language, setActivities]);
+    fetchData();
+  }, [language, setActivities]);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const data = await fetchLegalForms(language);
-  //       if (data) setLegalForms(data);
-  //     } catch (err) {
-  //       console.error("Error fetching legal forms:", err);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchLegalForms(language);
+        if (data) setLegalForms(data);
+      } catch (err) {
+        console.error("Error fetching legal forms:", err);
+      }
+    };
 
-  //   fetchData();
-  // }, [language, setLegalForms]);
+    fetchData();
+  }, [language, setLegalForms]);
 
   useEffect(() => {
     if (!selectedFindRegionID || selectedFindRegionID === 0) {
@@ -248,7 +247,7 @@ function App() {
           selectedFindRegionID,
           selectedFormID,
           selectedActivityID,
-          signal
+          signal,
         );
         if (data) {
           setCompaniesData(data);
@@ -294,8 +293,8 @@ function App() {
         companiesData,
         setSelectedActivityID,
         setIsLoadingCompanies,
-        // activities,
-        // legalForms,
+        activities,
+        legalForms,
       }}>
       <div className="app-container">
         {isLoadingCompanies && <LoadingSpinner />}
