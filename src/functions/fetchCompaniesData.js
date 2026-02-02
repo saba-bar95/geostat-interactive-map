@@ -1,11 +1,13 @@
+import { brApi } from "../BackEndUrl";
+
 const fetchCompaniesData = async (
   regionId,
   legalFormId,
   activityId,
-  signal
+  signal,
 ) => {
   try {
-    const baseUrl = "http://192.168.1.27:5000/api/gis-search";
+    const baseUrl = `${brApi}/api/gis-search`;
     const params = new URLSearchParams();
 
     // Only append regionId if it's defined and not 100
