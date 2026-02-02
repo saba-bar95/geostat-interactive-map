@@ -56,8 +56,9 @@ const MapComponent = () => {
 
   const markers = useMemo(() => {
     if (!companiesData) return [];
+
     return companiesData.map((company, index) => {
-      const { X, Y, Full_Name, Address } = company;
+      const { X, Y, Full_Name, Legal_Code, Activity_2_Name } = company;
       if (typeof X !== "number" || typeof Y !== "number") return null;
 
       return (
@@ -66,8 +67,14 @@ const MapComponent = () => {
           position={[X, Y]}
           eventHandlers={{
             click: (e) => {
-              setSelectedMarker({ X, Y, Full_Name, Address });
-              e.originalEvent.stopPropagation(); // Prevent map click from resetting immediately
+              setSelectedMarker({
+                X,
+                Y,
+                Full_Name,
+                Legal_Code,
+                Activity_2_Name,
+              });
+              e.originalEvent.stopPropagation();
             },
           }}
         />
@@ -202,11 +209,20 @@ const MapComponent = () => {
           >
             {markers}
             {selectedMarker && (
-              <Popup position={[selectedMarker.X, selectedMarker.Y]}>
-                <strong>{selectedMarker.Full_Name}</strong>
-                <br />
-                {selectedMarker.Address}
-              </Popup>
+              <>
+                <Popup position={[selectedMarker.X, selectedMarker.Y]}>
+                  <strong>{selectedMarker.Full_Name}</strong>
+                  <p style={{ width: "max-content" }}>
+                    {selectedMarker.Activity_2_Name}
+                  </p>
+                  <a
+                    href={`https://br.geostat.ge/?identificationNumber=${selectedMarker.Legal_Code}`}
+                    target="_blank"
+                    rel="noreferrer">
+                    Info
+                  </a>
+                </Popup>
+              </>
             )}
           </MarkerClusterGroup>
         )}
@@ -217,7 +233,7 @@ const MapComponent = () => {
               (region) =>
                 +region.region_id === +value.id ||
                 region.REGION_ID === +value.id ||
-                region.municipal_ === +value.id
+                region.municipal_ === +value.id,
             );
 
             const regionNumber = region ? region[`w_${indicatorYear}`] : 0;
@@ -306,7 +322,7 @@ const MapComponent = () => {
           zoomLevel > 8 &&
           municipalities.features.map((el) => {
             const municipality = munData.find(
-              (mun) => mun.municipal_ === el.properties.MUNICIPAL1
+              (mun) => mun.municipal_ === el.properties.MUNICIPAL1,
             );
 
             const munNumber =
