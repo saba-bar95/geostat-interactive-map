@@ -22,9 +22,8 @@ const Navigation = () => {
     <div className="navigation">
       <div className="navigation-container">
         <ul role="tablist">
-          {selectedQuery.links
-            .filter((link) => link.href !== "menu") // This hides the "menu" tab
-            .map((el, i) => (
+          {selectedQuery.links.map((el, i) => {
+            return (
               <li
                 key={i}
                 onClick={() => handleSelectLink(el)}
@@ -38,19 +37,22 @@ const Navigation = () => {
                 <a role="tab">
                   <i
                     className={`fa fa-${
-                      el.href === "home"
-                        ? "table"
-                        : el.href === "pie"
-                        ? "pie-chart"
-                        : el.href === "bar"
-                        ? "bar-chart"
-                        : el.href === "regmun"
-                        ? "globe"
-                        : "search"
+                      el.href === "menu"
+                        ? "sliders"
+                        : el.href === "home"
+                          ? "table"
+                          : el.href === "pie"
+                            ? "pie-chart"
+                            : el.href === "bar"
+                              ? "bar-chart"
+                              : el.href === "regmun"
+                                ? "globe"
+                                : "search"
                     }`}></i>
                 </a>
               </li>
-            ))}
+            );
+          })}
         </ul>
         {selectedLink !== null && (
           <div className="sidebar">
@@ -81,7 +83,7 @@ const Navigation = () => {
                       }}>
                       {el[`title_${language}`]}
                     </li>
-                  ) : null
+                  ) : null,
                 )}
               </ul>
             )}
