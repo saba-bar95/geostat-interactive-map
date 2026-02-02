@@ -7,3 +7,15 @@
 body {
   overflow: hidden;
 }
+
+.leaflet-popup-content {
+  max-width: 500px;
+  width: max-content !important;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.leaflet-popup-content p {
+  margin: 0;
+}
