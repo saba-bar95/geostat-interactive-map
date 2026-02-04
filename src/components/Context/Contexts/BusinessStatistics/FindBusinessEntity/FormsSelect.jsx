@@ -17,8 +17,8 @@ const FormsSelect = () => {
     <select
       style={{ width: "100%" }}
       name="formSelect"
-      id="form"
-      onChange={handleFormChange}>
+      onChange={handleFormChange}
+      autoComplete="on">
       <option>{text}</option>
       {legalForms &&
         legalForms.map((el) => (

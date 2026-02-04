@@ -26,16 +26,18 @@ const RegionSelect = () => {
       name="regionSelect"
       id="region"
       value={selectedFindRegionID ?? ""}
-      onChange={handleRegionChange}>
+      onChange={handleRegionChange}
+      autoComplete="on">
       <option>{text}</option>
-      {regData
-        .filter((reg) => reg.region_id != "12" && reg.region_id != "48")
-        .sort((a, b) => Number(a.region_id) - Number(b.region_id))
-        .map((reg) => (
-          <option key={reg.region_id} value={reg.region_id}>
-            {reg[`name_${language}`]}
-          </option>
-        ))}
+      {regData &&
+        regData
+          .filter((reg) => reg.region_id != "12" && reg.region_id != "48")
+          .sort((a, b) => Number(a.region_id) - Number(b.region_id))
+          .map((reg) => (
+            <option key={reg.region_id} value={reg.region_id}>
+              {reg[`name_${language}`]}
+            </option>
+          ))}
       <option value={100}>{georgia}</option>
     </select>
   );

@@ -5,15 +5,27 @@ import { QueriesContext } from "../../../../../App";
 const ActivitySelect = () => {
   const { language } = useParams();
 
-  const { activities, setSelectedActivityID } = useContext(QueriesContext);
+  const { activities, setSelectedActivityID, setActivityCode } =
+    useContext(QueriesContext);
 
   const handleActivityChange = (e) => {
     const selectedValue = +e.target.value;
 
     if (isNaN(selectedValue)) {
       setSelectedActivityID(null);
+      setActivityCode(null);
     } else {
       setSelectedActivityID(selectedValue);
+
+      // find the activity object by ID
+      const selectedActivity = activities.find(
+        (act) => act.ID === selectedValue,
+      );
+      if (selectedActivity) {
+        setActivityCode(selectedActivity.Activity_Code);
+      } else {
+        setActivityCode(null);
+      }
     }
   };
 
@@ -34,8 +46,8 @@ const ActivitySelect = () => {
     <select
       style={{ width: "100%", maxWidth: "320px" }}
       name="formSelect"
-      id="form"
-      onChange={handleActivityChange}>
+      onChange={handleActivityChange}
+      autoComplete="on">
       <option>{text}</option>
       {activities &&
         activities.map((el) =>
@@ -43,7 +55,7 @@ const ActivitySelect = () => {
             <option key={el.ID} value={el.ID} style={{ textTransform: "none" }}>
               {capitalizeFirstWord(el.Activity_Name)}
             </option>
-          ) : null
+          ) : null,
         )}
     </select>
   );

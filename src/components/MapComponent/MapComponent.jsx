@@ -49,12 +49,27 @@ const MapComponent = () => {
   const clusterRef = useRef(null);
 
   useEffect(() => {
-    if (companiesData && companiesData.length > 0) {
+    if (!selectedCompany) {
+      setSelectedMarker(null);
+    }
+  }, [selectedCompany]);
+
+  useEffect(() => {
+    if (companiesData) {
+      if (companiesData.length === 0) {
+        setIsLoadingCompanies(false);
+        alert(
+          language === "en"
+            ? "No companies were found with the given parameters."
+            : "მოცემული პარამეტრებით კომპანიები ვერ მოიძებნა.",
+        );
+      }
+
       requestAnimationFrame(() => {
         setIsLoadingCompanies(false);
       });
     }
-  }, [companiesData, setIsLoadingCompanies]);
+  }, [companiesData, setIsLoadingCompanies, language]);
 
   const markers = useMemo(() => {
     if (!companiesData) return [];

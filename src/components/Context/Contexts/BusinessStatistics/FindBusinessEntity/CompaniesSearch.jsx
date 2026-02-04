@@ -29,6 +29,11 @@ const CompaniesSearch = () => {
     return () => clearTimeout(handler);
   }, [searchValue, setCompaniesWithNames, setFilteredCompanies]);
 
+  const handleInputChange = (e) => {
+    setSearchValue(e.target.value);
+    setSelectedCompany(null); // reset when typing again
+  };
+
   const handleCompanyClick = (company) => {
     if (company.X && company.Y) {
       setSelectedCompany(company);
@@ -51,7 +56,7 @@ const CompaniesSearch = () => {
         id="search"
         type="search"
         value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
+        onChange={handleInputChange}
         placeholder={text}
       />
       {!hasSelected && filteredCompanies && filteredCompanies.length > 0 && (

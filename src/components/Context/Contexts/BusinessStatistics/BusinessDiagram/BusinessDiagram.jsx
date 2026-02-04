@@ -45,10 +45,14 @@ const BusinessDiagram = () => {
           <span className="diagram-span">{indicatorYear}</span>
         </p>
       </div>
-      {!isGender ? (
-        <PieChart data={regData} year={indicatorYear} />
+      {regData ? (
+        !isGender ? (
+          <PieChart data={regData} year={indicatorYear} />
+        ) : (
+          <PieChartGenders data={regData} year={indicatorYear} />
+        )
       ) : (
-        <PieChartGenders data={regData} year={indicatorYear} />
+        <p>Loading data...</p>
       )}
     </div>
   );
