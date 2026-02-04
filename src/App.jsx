@@ -17,6 +17,7 @@ import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 import { Analytics } from "@vercel/analytics/react";
 import fetchLegalForms from "./functions/fetchLegalForms";
 import fetchActivities from "./functions/fetchActitivities";
+import fetchCompaniesDataWithNames from "./functions/fetchCompaniesDataWithNames";
 
 export const QueriesContext = createContext();
 
@@ -44,7 +45,11 @@ function App() {
   const [isLoadingCompanies, setIsLoadingCompanies] = useState(false);
   const [selectedActivityID, setSelectedActivityID] = useState("");
   const [activities, setActivities] = useState("");
+  const [activityCode, setActivityCode] = useState("");
   const [legalForms, setLegalForms] = useState("");
+  const [companiesWithNames, setCompaniesWithNames] = useState("");
+  const [filteredCompanies, setFilteredCompanies] = useState(null);
+  const [selectedCompany, setSelectedCompany] = useState(null);
 
   useEffect(() => {
     if (regData && selectedRegionID) {
@@ -218,6 +223,26 @@ function App() {
   }, [language, setActivities]);
 
   useEffect(() => {
+    if (!selectedFindRegionID || !companiesWithNames) return; // ✅ only run when both are truthy
+
+    const fetchData = async () => {
+      try {
+        const data = await fetchCompaniesDataWithNames(
+          selectedFindRegionID,
+          companiesWithNames,
+          selectedFormID,
+          activityCode,
+        );
+        if (data) setFilteredCompanies(data);
+      } catch (err) {
+        console.error("Error fetching companies with names:", err);
+      }
+    };
+
+    fetchData();
+  }, [selectedFindRegionID, selectedFormID, activityCode, companiesWithNames]);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await fetchLegalForms(language);
@@ -295,6 +320,12 @@ function App() {
         setIsLoadingCompanies,
         activities,
         legalForms,
+        setCompaniesWithNames,
+        setActivityCode,
+        filteredCompanies,
+        setFilteredCompanies,
+        selectedCompany,
+        setSelectedCompany,
       }}>
       <div className="app-container">
         {isLoadingCompanies && <LoadingSpinner />}

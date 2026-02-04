@@ -5,6 +5,7 @@ import {
   Marker,
   LayersControl,
   GeoJSON,
+  Circle,
 } from "react-leaflet";
 import {
   useState,
@@ -40,6 +41,7 @@ const MapComponent = () => {
     indicatorInfo,
     companiesData,
     setIsLoadingCompanies,
+    selectedCompany,
   } = useContext(QueriesContext);
   const { language } = useParams();
 
@@ -160,6 +162,32 @@ const MapComponent = () => {
     setSelectedMarker(null);
   }, [zoomLevel]);
 
+  // Zoom to selected company
+  useEffect(() => {
+    if (selectedCompany && mapRef.current) {
+      const { X, Y } = selectedCompany;
+      if (typeof X === "number" && typeof Y === "number") {
+        const map = mapRef.current;
+        // Zoom to the location with a higher zoom level
+        map.setView([X, Y], 15, {
+          animate: true,
+          duration: 1,
+        });
+
+        // Set the selected marker to open the popup
+        setTimeout(() => {
+          setSelectedMarker({
+            X,
+            Y,
+            Full_Name: selectedCompany.Full_Name,
+            Legal_Code: selectedCompany.Legal_Code,
+            Activity_2_Name: selectedCompany.Activity_2_Name,
+          });
+        }, 500);
+      }
+    }
+  }, [selectedCompany]);
+
   return (
     <>
       <MapContainer center={center} zoom={8} zoomControl={false} ref={mapRef}>
@@ -204,28 +232,52 @@ const MapComponent = () => {
           <MarkerClusterGroup
             iconCreateFunction={createCustomClusterIcon}
             ref={clusterRef}
-            zoomToBoundsOnClick={true} // Ensure clicking zooms to cluster
-            spiderfyOnMaxZoom={true} // Ensure spiderfying at max zoom
-          >
+            zoomToBoundsOnClick={true}
+            spiderfyOnMaxZoom={true}>
             {markers}
             {selectedMarker && (
-              <>
-                <Popup position={[selectedMarker.X, selectedMarker.Y]}>
-                  <strong>{selectedMarker.Full_Name}</strong>
-                  <p style={{ width: "max-content" }}>
-                    {selectedMarker.Activity_2_Name}
-                  </p>
+              <Popup
+                position={[selectedMarker.X, selectedMarker.Y]}
+                color="#33ff00"
+                className="selected-company-popup">
+                <div
+                  style={{
+                    backgroundColor: "#f0f8ff",
+                    padding: "10px",
+                    borderLeft: "4px solid #007bff",
+                  }}>
+                  <strong style={{ color: "#007bff" }}>
+                    {selectedMarker.Full_Name}
+                  </strong>
+
+                  <p>{selectedMarker.Activity_2_Name}</p>
                   <a
                     href={`https://br.geostat.ge/?identificationNumber=${selectedMarker.Legal_Code}`}
                     target="_blank"
                     rel="noreferrer">
                     Info
                   </a>
-                </Popup>
-              </>
+                </div>
+              </Popup>
             )}
           </MarkerClusterGroup>
         )}
+
+        {/* Red circle around selected company */}
+        {selectedCompany &&
+          typeof selectedCompany.X === "number" &&
+          typeof selectedCompany.Y === "number" && (
+            <Circle
+              center={[selectedCompany.X, selectedCompany.Y]}
+              radius={50}
+              pathOptions={{
+                color: "red",
+                fillColor: "red",
+                fillOpacity: 0.2,
+                weight: 3,
+              }}
+            />
+          )}
 
         {regData &&
           Object.entries(regions).map(([key, value]) => {

@@ -1,6 +1,7 @@
 import RegionSelect from "./RegionSelect";
 import FormsSelect from "./FormsSelect";
 import ActivitySelect from "./ActivitySelect";
+import CompaniesSearch from "./CompaniesSearch";
 
 const FindBusinessEntity = () => {
   return (
@@ -16,6 +17,7 @@ const FindBusinessEntity = () => {
         <RegionSelect />
         <FormsSelect />
         <ActivitySelect />
+        <CompaniesSearch />
       </div>
     </div>
   );
