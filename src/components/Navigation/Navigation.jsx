@@ -1,20 +1,33 @@
 import "./Navigation.scss";
 import { useContext } from "react";
 import queries from "./queries";
-import { QueriesContext } from "../../App";
-import Context from "../Context/Context";
-import { useParams } from "react-router";
+import { QueriesContext } from "../Context/BusinessStatistics/BusinessStatistics";
+import { PriceQueriesContext } from "../Context/ConsumerPriceIndex/ConsumerPriceIndex";
+import Context from "../Context/BusinessStatistics/Context";
+import PriceContext from "../Context/ConsumerPriceIndex/PriceContext";
+import { useParams, useNavigate } from "react-router-dom";
 
 const Navigation = () => {
+  const businessContext = useContext(QueriesContext);
+  const priceContext = useContext(PriceQueriesContext);
+
+  // Use whichever context is available
+  const context = businessContext || priceContext;
+
+  // Determine which context is active
+  const isBusinessContext = !!businessContext;
+  const isPriceContext = !!priceContext;
+
   const {
     selectedQuery,
     selectedLink,
     handleSelectQuery,
     handleSelectLink,
     closeSidebar,
-  } = useContext(QueriesContext);
+  } = context;
 
   const { language } = useParams();
+  const navigate = useNavigate();
 
   const field = language === "ge" ? "დარგი" : "Field";
 
@@ -80,6 +93,7 @@ const Navigation = () => {
                       onClick={() => {
                         handleSelectQuery(el);
                         handleSelectLink(el.links[0]);
+                        navigate(`/${language}/${el.path}`);
                       }}>
                       {el[`title_${language}`]}
                     </li>
@@ -87,7 +101,12 @@ const Navigation = () => {
                 )}
               </ul>
             )}
-            {selectedLink.href !== "menu" && <Context />}
+            {selectedLink.href !== "menu" && (
+              <>
+                {isBusinessContext && <Context />}
+                {isPriceContext && <PriceContext />}
+              </>
+            )}
           </div>
         )}
       </div>

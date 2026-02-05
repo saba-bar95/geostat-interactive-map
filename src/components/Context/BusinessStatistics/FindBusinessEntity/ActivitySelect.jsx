@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { useParams } from "react-router";
-import { QueriesContext } from "../../../../../App";
+import { QueriesContext } from "../BusinessStatistics";
 
 const ActivitySelect = () => {
   const { language } = useParams();

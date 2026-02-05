@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { useParams } from "react-router";
-import { QueriesContext } from "../../../../../App";
+import { QueriesContext } from "../BusinessStatistics";
 
 const FormsSelect = () => {
   const { language } = useParams();

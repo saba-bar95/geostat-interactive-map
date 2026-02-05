@@ -2,13 +2,13 @@ import YearsSelect from "../YearsSelect";
 import IndicatorsSelect from "../IndicatorsSelect";
 import RegionSelect from "../RegionSelect";
 import { useContext, useState, useEffect } from "react";
-import { QueriesContext } from "../../../../../App";
+import { QueriesContext } from "../BusinessStatistics";
 import { useParams } from "react-router";
-import Download from "../BusinessDiagram/Download/Download";
+import Download from "../Diagram/Download/Download";
 import BarChart from "./BarChart";
 import BarChartGenders from "./BarChartGenders";
 
-const BusinessHistogram = () => {
+const Histogram = () => {
   const {
     selectedQuery,
     indicator,
@@ -78,4 +78,4 @@ const BusinessHistogram = () => {
   );
 };
 
-export default BusinessHistogram;
+export default Histogram;

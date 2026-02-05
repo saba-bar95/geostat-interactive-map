@@ -1,6 +1,6 @@
 import jsPDF from "jspdf";
 import { autoTable } from "jspdf-autotable";
-import georgianFont from "../../../../../../assets/fonts/NotoSansGeorgian_ExtraCondensed-Bold.ttf";
+import georgianFont from "../../../../../assets/fonts/NotoSansGeorgian_ExtraCondensed-Bold.ttf";
 
 const downloadPDF = (
   language,
@@ -9,7 +9,7 @@ const downloadPDF = (
   indicator,
   unit,
   isGender,
-  isEmployees
+  isEmployees,
 ) => {
   const doc = new jsPDF();
   const isGeorgian = language === "ge";

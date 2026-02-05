@@ -1,14 +1,14 @@
-import "./BusinessIndicator.scss";
+import "./Indicator.scss";
 import { useContext, useState, useEffect } from "react";
 import { useParams } from "react-router";
-import { QueriesContext } from "../../../../../App";
+import { QueriesContext } from "../BusinessStatistics";
 import AngleRight from "./AngleRight";
 import AngleDown from "./AngleDown";
-import municipalities from "../../../../../coordinates/municipalities";
+import municipalities from "../../../../coordinates/municipalities";
 import YearsSelect from "../YearsSelect";
 import IndicatorsSelect from "../IndicatorsSelect";
 
-const BusinessIndicator = () => {
+const Indicator = () => {
   const {
     regData,
     munData,
@@ -38,7 +38,7 @@ const BusinessIndicator = () => {
       .filter(
         (region) =>
           region[`f_${indicatorYear}`] !== 0 &&
-          region[`f_${indicatorYear}`] !== null
+          region[`f_${indicatorYear}`] !== null,
       )
       .sort((a, b) => b[`f_${indicatorYear}`] - a[`f_${indicatorYear}`]);
 
@@ -121,7 +121,7 @@ const BusinessIndicator = () => {
                       .filter((mun) => mun[`w_${indicatorYear}`] !== null)
                       .sort(
                         (a, b) =>
-                          b[`w_${indicatorYear}`] - a[`w_${indicatorYear}`]
+                          b[`w_${indicatorYear}`] - a[`w_${indicatorYear}`],
                       );
                 }
 
@@ -139,8 +139,7 @@ const BusinessIndicator = () => {
                         indicatorYear > 2013 && regId === "11"
                           ? { marginLeft: "23px" }
                           : undefined
-                      }
-                    >
+                      }>
                       {region[`w_${indicatorYear}`] > 0 && (
                         <>
                           <p>
@@ -173,27 +172,26 @@ const BusinessIndicator = () => {
                                   .filter(
                                     (mun1) =>
                                       mun1.properties.MUNICIPAL1 ===
-                                      mun.municipal_
+                                      mun.municipal_,
                                   )
                                   .map((mun2) =>
                                     language === "en"
                                       ? mun2.properties.NAME_EN
-                                      : mun2.properties.NAME_SYLFA
+                                      : mun2.properties.NAME_SYLFA,
                                   );
 
                                 return (
                                   <div
                                     className="mun-paras"
-                                    key={mun.municipal_}
-                                  >
+                                    key={mun.municipal_}>
                                     <p>{name}</p>
                                     <p>
                                       {typeof mun[`w_${indicatorYear}`] ===
                                       "number"
                                         ? mun[`w_${indicatorYear}`].toFixed(1)
                                         : typeof mun.value === "number"
-                                        ? mun.value.toFixed(1)
-                                        : "N/A"}
+                                          ? mun.value.toFixed(1)
+                                          : "N/A"}
                                     </p>
                                   </div>
                                 );
@@ -210,4 +208,4 @@ const BusinessIndicator = () => {
   );
 };
 
-export default BusinessIndicator;
+export default Indicator;

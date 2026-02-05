@@ -1,6 +1,6 @@
 import { useParams } from "react-router";
 import { useContext, useState, useEffect } from "react";
-import { QueriesContext } from "../../../../../App";
+import { QueriesContext } from "../BusinessStatistics";
 import "./CompaniesSearch.scss";
 
 const CompaniesSearch = () => {

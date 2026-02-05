@@ -1,13 +1,13 @@
 import YearsSelect from "../YearsSelect";
 import IndicatorsSelect from "../IndicatorsSelect";
 import { useContext } from "react";
-import { QueriesContext } from "../../../../../App";
+import { QueriesContext } from "../BusinessStatistics";
 import { useParams } from "react-router";
 import PieChart from "./PieChart";
 import PieChartGenders from "./PieChartGenders";
 import Download from "./Download/Download";
 
-const BusinessDiagram = () => {
+const Diagram = () => {
   const {
     regData,
     selectedQuery,
@@ -58,4 +58,4 @@ const BusinessDiagram = () => {
   );
 };
 
-export default BusinessDiagram;
+export default Diagram;

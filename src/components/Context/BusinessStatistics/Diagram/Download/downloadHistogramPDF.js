@@ -1,6 +1,6 @@
 import jsPDF from "jspdf";
 import { autoTable } from "jspdf-autotable";
-import georgianFont from "../../../../../../assets/fonts/NotoSansGeorgian_ExtraCondensed-Bold.ttf";
+import georgianFont from "../../../../../assets/fonts/NotoSansGeorgian_ExtraCondensed-Bold.ttf";
 
 const downloadHistogramPDF = (
   language,
@@ -10,7 +10,7 @@ const downloadHistogramPDF = (
   unit,
   isGender,
   isEmployees,
-  selectedRegion
+  selectedRegion,
 ) => {
   const doc = new jsPDF();
 

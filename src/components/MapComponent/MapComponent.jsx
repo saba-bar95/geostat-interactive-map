@@ -19,11 +19,11 @@ import "leaflet/dist/leaflet.css";
 import "./MapComponent.scss";
 import regions from "../../coordinates/regions";
 import municipalities from "../../coordinates/municipalities";
+import { useParams } from "react-router";
 import getStyle from "../../functions/getStyle";
 import MapEventsHandler from "../../functions/MapEventsHandler";
-import { QueriesContext } from "../../App";
+import { QueriesContext } from "../Context/BusinessStatistics/BusinessStatistics";
 import checkNumberRange from "../../functions/checkNumberRange";
-import { useParams } from "react-router";
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import createCustomClusterIcon from "../../functions/createCustomClusterIcon";
 

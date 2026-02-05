@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { useParams } from "react-router";
-import { QueriesContext } from "../../../../App";
+import { QueriesContext } from "./BusinessStatistics";
 
 const YearsSelect = () => {
   const { language } = useParams();
@@ -22,7 +22,7 @@ const YearsSelect = () => {
   const isDisabled = (year) =>
     disableRules.some(
       ({ indexes, min }) =>
-        indexes.includes(indicators.indexOf(indicator)) && year < min
+        indexes.includes(indicators.indexOf(indicator)) && year < min,
     );
 
   return (

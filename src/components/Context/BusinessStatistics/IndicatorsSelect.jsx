@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { QueriesContext } from "../../../../App";
+import { QueriesContext } from "./BusinessStatistics";
 
 const IndicatorsSelect = () => {
   const {

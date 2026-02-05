@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
 import { useParams } from "react-router";
 import { useState, useContext } from "react";
-import { QueriesContext } from "../../../../../../App";
 import "./Download.scss";
 import downloadExcel from "./downloadExcel";
 import downloadPDF from "./downloadPDF";
 import downloadJPG from "./downloadJPG";
 import downloadHistogramExcel from "./downloadHistogramExcel";
 import downloadHistogramPDF from "./downloadHistogramPDF";
+import { QueriesContext } from "../../BusinessStatistics";
 
 const Download = ({ isHistogram }) => {
   const downloadClasses = isHistogram
@@ -47,7 +47,7 @@ const Download = ({ isHistogram }) => {
             unit,
             isGender,
             isEmployees,
-            selectedRegion
+            selectedRegion,
           );
         } else {
           downloadPDF(
@@ -57,7 +57,7 @@ const Download = ({ isHistogram }) => {
             indicator,
             unit,
             isGender,
-            isEmployees
+            isEmployees,
           );
         }
         break;
@@ -71,7 +71,7 @@ const Download = ({ isHistogram }) => {
             unit,
             isGender,
             isEmployees,
-            selectedRegion
+            selectedRegion,
           );
         } else {
           downloadExcel(
@@ -81,7 +81,7 @@ const Download = ({ isHistogram }) => {
             indicator,
             unit,
             isGender,
-            isEmployees
+            isEmployees,
           );
         }
         break;
