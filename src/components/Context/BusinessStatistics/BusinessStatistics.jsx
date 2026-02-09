@@ -1,5 +1,5 @@
 import { useParams } from "react-router";
-import MapComponent from "../../MapComponent/MapComponent";
+import MapComponent from "./MapComponent/MapComponent";
 import Navigation from "../../Navigation/Navigation";
 import query from "./query";
 import getIndicators from "../../../functions/getIndicators";
@@ -14,7 +14,7 @@ import fetchCompaniesDataWithNames from "../../../functions/fetchCompaniesData";
 import fetchLegalForms from "../../../functions/fetchLegalForms";
 import fetchCompaniesData from "../../../functions/fetchCompaniesData";
 import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
-import ColorBox from "../../ColorBox/ColorBox";
+import ColorBox from "./ColorBox/ColorBox";
 import LanguageChanger from "../../LanguageChanger/LanguageChanger";
 import { Analytics } from "@vercel/analytics/react";
 
