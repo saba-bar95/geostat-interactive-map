@@ -35,3 +35,14 @@ body {
     color: #1976d2; // Darker blue for company name
   }
 }
+
+.leaflet-tooltip.region-label {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+  text-shadow: 1px 1px 2px #fff;
+  pointer-events: none; /* ensures labels don't block map clicks */
+}
