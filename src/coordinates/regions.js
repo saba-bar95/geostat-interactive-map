@@ -2,7 +2,7 @@ const regions = {
   "აჭარის ა.რ.": {
     type: "Feature",
     id: "15",
-    properties: { name: "აჭარის ა.რ." },
+    properties: { name: "აჭარის ა.რ.", name_en: "Adjara A.R." },
     geometry: {
       type: "MultiPolygon",
       coordinates: [
@@ -6247,7 +6247,7 @@ const regions = {
   გურია: {
     type: "Feature",
     id: "23",
-    properties: { name: "გურია" },
+    properties: { name: "გურია", name_en : "Guria" },
     geometry: {
       type: "MultiPolygon",
       coordinates: [
@@ -16848,7 +16848,7 @@ const regions = {
   იმერეთი: {
     type: "Feature",
     id: "26",
-    properties: { name: "იმერეთი" },
+    properties: { name: "იმერეთი", name_en: "Imereti" },
     geometry: {
       type: "MultiPolygon",
       coordinates: [
@@ -23212,7 +23212,7 @@ const regions = {
   "რაჭა-ლეჩხუმი და ქვემო სვანეთი": {
     type: "Feature",
     id: "35",
-    properties: { name: "რაჭა-ლეჩხუმი და ქვემო სვანეთი" },
+    properties: { name: "რაჭა-ლეჩხუმი და ქვემო სვანეთი", name_en: "Racha-Lechkhumi and Kvemo Svaneti" },
     geometry: {
       type: "MultiPolygon",
       coordinates: [
@@ -25048,7 +25048,7 @@ const regions = {
   "სამეგრელო-ზემო სვანეთი": {
     type: "Feature",
     id: "38",
-    properties: { name: "სამეგრელო-ზემო სვანეთი" },
+    properties: { name: "სამეგრელო-ზემო სვანეთი", name_en: "Samegrelo-Zemo Svaneti" },
     geometry: {
       type: "MultiPolygon",
       coordinates: [
@@ -37814,7 +37814,7 @@ const regions = {
   კახეთი: {
     type: "Feature",
     id: "29",
-    properties: { name: "კახეთი" },
+    properties: { name: "კახეთი", name_en: "Kakheti" },
     geometry: {
       type: "MultiPolygon",
       coordinates: [
@@ -48980,7 +48980,7 @@ const regions = {
   "ქვემო ქართლი": {
     type: "Feature",
     id: "44",
-    properties: { name: "ქვემო ქართლი" },
+    properties: { name: "ქვემო ქართლი", name_en:"Kvemo Kartli" },
     geometry: {
       type: "MultiPolygon",
       coordinates: [
@@ -91840,7 +91840,7 @@ const regions = {
   "მცხეთა-მთიანეთი": {
     type: "Feature",
     id: "32",
-    properties: { name: "მცხეთა-მთიანეთი" },
+    properties: { name: "მცხეთა-მთიანეთი", name_en: "Mtskheta-Mtianeti" },
     geometry: {
       type: "MultiPolygon",
       coordinates: [
@@ -113122,7 +113122,7 @@ const regions = {
   "სამცხე-ჯავახეთი": {
     type: "Feature",
     id: "41",
-    properties: { name: "სამცხე-ჯავახეთი" },
+    properties: { name: "სამცხე-ჯავახეთი", name_en: "Samtskhe-Javakheti"},
     geometry: {
       type: "MultiPolygon",
       coordinates: [
@@ -116383,7 +116383,7 @@ const regions = {
   "შიდა ქართლი": {
     type: "Feature",
     id: "47",
-    properties: { name: "შიდა ქართლი" },
+    properties: { name: "შიდა ქართლი", name_en: "Shida Kartli" },
     geometry: {
       type: "MultiPolygon",
       coordinates: [
@@ -128241,7 +128241,7 @@ const regions = {
   "ქ. თბილისი": {
     type: "Feature",
     id: "11",
-    properties: { name: "ქ. თბილისი" },
+    properties: { name: "ქ. თბილისი", name_en: "C. Tbilisi" },
     geometry: {
       type: "MultiPolygon",
       coordinates: [
