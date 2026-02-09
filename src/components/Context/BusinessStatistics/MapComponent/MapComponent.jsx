@@ -17,15 +17,15 @@ import {
 } from "react";
 import "leaflet/dist/leaflet.css";
 import "./MapComponent.scss";
-import regions from "../../coordinates/regions";
-import municipalities from "../../coordinates/municipalities";
+import regions from "../../../../coordinates/regions";
+import municipalities from "../../../../coordinates/municipalities";
 import { useParams } from "react-router";
-import getStyle from "../../functions/getStyle";
-import MapEventsHandler from "../../functions/MapEventsHandler";
-import { QueriesContext } from "../Context/BusinessStatistics/BusinessStatistics";
-import checkNumberRange from "../../functions/checkNumberRange";
+import getStyle from "../../../../functions/getStyle";
+import MapEventsHandler from "../../../../functions/MapEventsHandler";
+import { QueriesContext } from "../BusinessStatistics";
+import checkNumberRange from "../../../../functions/checkNumberRange";
 import MarkerClusterGroup from "react-leaflet-markercluster";
-import createCustomClusterIcon from "../../functions/createCustomClusterIcon";
+import createCustomClusterIcon from "../../../../functions/createCustomClusterIcon";
 
 const MapComponent = () => {
   const [zoomLevel, setZoomLevel] = useState(8);

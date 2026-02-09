@@ -1,6 +1,6 @@
 import "./ColorBox.scss";
 import { useContext } from "react";
-import { QueriesContext } from "../Context/BusinessStatistics/BusinessStatistics";
+import { QueriesContext } from "../BusinessStatistics";
 import styled from "styled-components";
 import { useParams } from "react-router";
 
