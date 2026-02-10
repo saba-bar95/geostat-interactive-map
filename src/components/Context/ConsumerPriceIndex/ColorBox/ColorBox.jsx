@@ -13,7 +13,7 @@ const Span = styled.span`
 
 const ColorBox = () => {
   const { language } = useParams();
-  const { indicator, indicatorInfo } = useContext(PriceQueriesContext);
+  const { indicatorInfo } = useContext(PriceQueriesContext);
 
   // Get all paragraph keys dynamically
   const paraKeys = Object.keys(indicatorInfo)
@@ -30,7 +30,7 @@ const ColorBox = () => {
     if (Array.isArray(num)) {
       if (num.length === 1) {
         // For cases like "6para" with only one number
-        return `${num[0]} ≥`;
+        return `${num[0]} >`;
       }
       // For ranges like [-4, -2]
       return `${num[0]} – ${num[1]}`;
@@ -42,9 +42,7 @@ const ColorBox = () => {
 
   return (
     <div className="colorbox-container">
-      <h1>
-        {indicator} ({indicatorInfo[`measurement_${language}`]})
-      </h1>
+      <h1>{indicatorInfo[`measurement_${language}`]}</h1>
       <div className="para-container">
         {paraKeys.map((key) => (
           <p key={key}>
