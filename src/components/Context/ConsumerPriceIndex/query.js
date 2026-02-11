@@ -12,11 +12,11 @@ const query = {
       name_ge: "მაჩვენებელი",
       name_en: "Indicator",
     },
-    {
-      href: "pie",
-      name_ge: "დიაგრამა",
-      name_en: "Diagram",
-    },
+    // {
+    //   href: "pie",
+    //   name_ge: "დიაგრამა",
+    //   name_en: "Diagram",
+    // },
     {
       href: "bar",
       name_ge: "ჰისტოგრამა",
