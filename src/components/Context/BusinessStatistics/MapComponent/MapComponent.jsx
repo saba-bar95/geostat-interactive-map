@@ -27,6 +27,20 @@ import checkNumberRange from "../../../../functions/checkNumberRange";
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import createCustomClusterIcon from "../../../../functions/createCustomClusterIcon";
 
+import L from "leaflet";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
+
+// Fix default icon paths so they work in production
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
+
 const MapComponent = () => {
   const [zoomLevel, setZoomLevel] = useState(8);
   const center = [41.9, 43.9];
@@ -248,19 +262,22 @@ const MapComponent = () => {
             iconCreateFunction={createCustomClusterIcon}
             ref={clusterRef}
             zoomToBoundsOnClick={true}
-            spiderfyOnMaxZoom={true}>
+            spiderfyOnMaxZoom={true}
+          >
             {markers}
             {selectedMarker && (
               <Popup
                 position={[selectedMarker.X, selectedMarker.Y]}
                 color="#33ff00"
-                className="selected-company-popup">
+                className="selected-company-popup"
+              >
                 <div
                   style={{
                     backgroundColor: "#f0f8ff",
                     padding: "10px",
                     borderLeft: "4px solid #007bff",
-                  }}>
+                  }}
+                >
                   <strong style={{ color: "#007bff" }}>
                     {selectedMarker.Full_Name}
                   </strong>
@@ -269,7 +286,8 @@ const MapComponent = () => {
                   <a
                     href={`https://br.geostat.ge/?identificationNumber=${selectedMarker.Legal_Code}`}
                     target="_blank"
-                    rel="noreferrer">
+                    rel="noreferrer"
+                  >
                     Info
                   </a>
                 </div>
@@ -339,7 +357,8 @@ const MapComponent = () => {
                 }}
                 key={key}
                 data={value}
-                style={getStyle(value, zoomLevel, "region", regColor)}>
+                style={getStyle(value, zoomLevel, "region", regColor)}
+              >
                 <Popup>
                   <p className="popup-para">{region[`name_${language}`]}</p>
                   {typeof regionNumber === "number" &&
@@ -415,7 +434,8 @@ const MapComponent = () => {
                 }}
                 key={el.properties.NAME_GE}
                 data={el}
-                style={getStyle(el, zoomLevel, "municipality", munColor)}>
+                style={getStyle(el, zoomLevel, "municipality", munColor)}
+              >
                 <Popup>
                   <p className="popup-para">
                     {language === "ge"
