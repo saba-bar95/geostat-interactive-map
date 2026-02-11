@@ -1,7 +1,9 @@
+import backEndUrl from "../BackEndUrl";
+
 const fetchPriceGroceryData = async (indicator, year, month) => {
   try {
     const response = await fetch(
-      `http://192.168.1.27:5000/api/${indicator}?year=${year}&month=${month}`,
+      `${backEndUrl}/api/${indicator}?year=${year}&month=${month}`,
     );
 
     if (!response.ok) {
