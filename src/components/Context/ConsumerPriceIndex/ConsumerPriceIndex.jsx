@@ -10,6 +10,7 @@ import fetchPriceGroceryData from "../../../functions/fetchPriceGroceryData";
 import getPriceIndicators from "../../../functions/getPriceIndicators";
 import getPriceIntervals from "../../../functions/getPriceIntervals";
 import ColorBox from "./ColorBox/ColorBox";
+import fetchPriceInitialYearAndMonth from "../../../functions/fetchPriceInitialYearAndMonth";
 
 export const PriceQueriesContext = createContext();
 
@@ -19,8 +20,8 @@ const ConsumerPriceIndex = () => {
   const [selectedLink, setSelectedLink] = useState(null);
   const [regData, setRegData] = useState(null);
   const [groceryData, setGroceryData] = useState(null);
-  const [indicatorYear, setIndicatorYear] = useState(2025);
-  const [indicatorMonth, setIndicatorMonth] = useState(1);
+  const [indicatorYear, setIndicatorYear] = useState(null);
+  const [indicatorMonth, setIndicatorMonth] = useState(null);
   const [indicatorIndex, setIndicatorIndex] = useState(0);
   const [indicator, setIndicator] = useState(
     () => getPriceIndicators(language)[indicatorIndex],
@@ -60,6 +61,22 @@ const ConsumerPriceIndex = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const data = await fetchPriceInitialYearAndMonth();
+        setIndicatorYear(data.year);
+        setIndicatorMonth(data.month);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // Only fetch if year and month are available
+      if (indicatorYear === null || indicatorMonth === null) return;
+
+      try {
         const indicatorKey = indicatorMap[indicator];
 
         const data = await fetchPriceRegData(
@@ -77,6 +94,9 @@ const ConsumerPriceIndex = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      // Only fetch if year and month are available
+      if (indicatorYear === null || indicatorMonth === null) return;
+
       try {
         const indicatorKey = groceryIndicatorMap[indicator];
 
