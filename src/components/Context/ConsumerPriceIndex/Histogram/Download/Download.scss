@@ -1,10 +1,10 @@
 .download-container {
-  position: absolute;
-  top: 40px;
-  right: 0;
-  display: flex;
-  align-items: start;
-  gap: 10px;
+  // position: absolute;
+  // top: 40px;
+  // right: 0;
+  // display: flex;
+  // align-items: start;
+  // gap: 10px;
 
   .dropdown-container {
     display: none;
@@ -96,7 +96,7 @@
   }
 }
 
-.hist-download-container {
+.hist-download-container-pages {
   z-index: 1;
   top: 0;
   right: 0;
@@ -107,7 +107,7 @@
 }
 
 @media (min-width: 769px) and (max-width: 1200px) {
-  .download-container {
+  .download-container-pages {
     .dropdown-container {
       .wrapper {
         div {
@@ -130,7 +130,7 @@
 }
 
 @media (min-width: 0) and (max-width: 768px) {
-  .download-container {
+  .download-container-pages {
     gap: 5px;
 
     .dropdown-container {

@@ -8,7 +8,7 @@ import downloadHistogramPDF from "./downloadHistogramPDF";
 import { PriceQueriesContext } from "../../ConsumerPriceIndex";
 
 const Download = ({ data, selectedRegionName, selecetedMonth }) => {
-  const downloadClasses = "download-container hist-download-container";
+  const downloadClasses = "download-container hist-download-container-pages";
 
   const formats = ["jpg", "pdf", "xlsx"];
   const [showWrapper, setShowWrapper] = useState(false);

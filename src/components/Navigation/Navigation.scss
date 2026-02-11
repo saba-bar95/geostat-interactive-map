@@ -73,6 +73,7 @@
           padding: 0 30px;
           flex: 1;
           justify-content: start;
+          text-align: center;
         }
 
         .sidebar-close {
@@ -165,7 +166,7 @@
   .navigation {
     .navigation-container {
       .sidebar {
-        // max-width: 250px;
+        max-width: 270px;
         min-width: initial;
 
         p {
@@ -189,7 +190,7 @@
         }
 
         h2 {
-          font-size: 18px !important;
+          font-size: 15px !important;
           justify-content: center !important;
         }
 
