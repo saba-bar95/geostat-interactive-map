@@ -10,7 +10,7 @@ import fetchRegionGenderData from "../../../functions/fetchRegionGenderData";
 import fetchData from "../../../functions/fetchData";
 import fetchPayGender from "../../../functions/fetchPayGender";
 import fetchActivities from "../../../functions/fetchActitivities";
-import fetchCompaniesDataWithNames from "../../../functions/fetchCompaniesData";
+import fetchCompaniesDataWithNames from "../../../functions/fetchCompaniesDataWithNames";
 import fetchLegalForms from "../../../functions/fetchLegalForms";
 import fetchCompaniesData from "../../../functions/fetchCompaniesData";
 import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
@@ -287,6 +287,15 @@ const BusinessStatistics = () => {
     return () => controller.abort();
   }, [selectedFindRegionID, selectedFormID, selectedActivityID]);
 
+  useEffect(() => {
+    setSelectedCompany(null);
+  }, [
+    selectedFindRegionID,
+    setFilteredCompanies,
+    selectedFormID,
+    selectedActivityID,
+  ]);
+
   return (
     <QueriesContext.Provider
       value={{
@@ -325,6 +334,9 @@ const BusinessStatistics = () => {
         setFilteredCompanies,
         selectedCompany,
         setSelectedCompany,
+        indicatorIndex,
+        selectedFormID,
+        selectedActivityID,
       }}>
       <div className="app-container">
         {isLoadingCompanies && <LoadingSpinner />}

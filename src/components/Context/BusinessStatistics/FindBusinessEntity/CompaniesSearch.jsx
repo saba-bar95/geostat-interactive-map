@@ -10,27 +10,27 @@ const CompaniesSearch = () => {
     filteredCompanies,
     setFilteredCompanies,
     setSelectedCompany,
+    selectedFindRegionID,
+    selectedFormID,
+    selectedActivityID,
   } = useContext(QueriesContext);
 
-  const [searchValue, setSearchValue] = useState("");
+  const [searchedCompanysName, setSearchedCompanysName] = useState("");
   const [hasSelected, setHasSelected] = useState(false); // ✅ track if a company was chosen
   const text = language === "en" ? "search..." : "მოძებნე...";
 
   useEffect(() => {
-    const handler = setTimeout(() => {
-      if (searchValue === "") {
-        setFilteredCompanies([]);
-        setHasSelected(false); // reset when input is cleared
-      } else {
-        setCompaniesWithNames(searchValue);
-        setHasSelected(false); // reset when typing again
-      }
-    }, 400); // wait 400ms after typing
-    return () => clearTimeout(handler);
-  }, [searchValue, setCompaniesWithNames, setFilteredCompanies]);
+    if (searchedCompanysName === "") {
+      setFilteredCompanies([]);
+      setHasSelected(false); // reset when input is cleared
+    } else {
+      setCompaniesWithNames(searchedCompanysName);
+      setHasSelected(false); // reset when typing again
+    }
+  }, [searchedCompanysName, setCompaniesWithNames, setFilteredCompanies]);
 
   const handleInputChange = (e) => {
-    setSearchValue(e.target.value);
+    setSearchedCompanysName(e.target.value);
     setSelectedCompany(null); // reset when typing again
   };
 
@@ -38,7 +38,7 @@ const CompaniesSearch = () => {
     if (company.X && company.Y) {
       setSelectedCompany(company);
       setFilteredCompanies([]); // ✅ clear dropdown
-      setSearchValue(company.Full_Name); // ✅ put name in input
+      setSearchedCompanysName(company.Full_Name); // ✅ put name in input
       setHasSelected(true); // ✅ hide dropdown after selection
     } else {
       alert(
@@ -49,28 +49,41 @@ const CompaniesSearch = () => {
     }
   };
 
+  useEffect(() => {
+    setSearchedCompanysName("");
+    setFilteredCompanies([]);
+  }, [
+    selectedFindRegionID,
+    setFilteredCompanies,
+    selectedFormID,
+    selectedActivityID,
+  ]);
+
   return (
     <div className="companies-search-container">
       <input
         style={{ width: "100%" }}
         id="search"
         type="search"
-        value={searchValue}
+        value={searchedCompanysName}
         onChange={handleInputChange}
         placeholder={text}
       />
-      {!hasSelected && filteredCompanies && filteredCompanies.length > 0 && (
-        <div className="companies-wrapper">
-          {filteredCompanies.map((company, index) => (
-            <p
-              key={index}
-              onClick={() => handleCompanyClick(company)}
-              style={{ cursor: "pointer" }}>
-              {company.Full_Name} ({company.Legal_Code})
-            </p>
-          ))}
-        </div>
-      )}
+      {!hasSelected &&
+        searchedCompanysName !== "" &&
+        filteredCompanies &&
+        filteredCompanies.length > 0 && (
+          <div className="companies-wrapper">
+            {filteredCompanies.map((company, index) => (
+              <p
+                key={index}
+                onClick={() => handleCompanyClick(company)}
+                style={{ cursor: "pointer" }}>
+                {company.Full_Name} ({company.Legal_Code})
+              </p>
+            ))}
+          </div>
+        )}
     </div>
   );
 };
