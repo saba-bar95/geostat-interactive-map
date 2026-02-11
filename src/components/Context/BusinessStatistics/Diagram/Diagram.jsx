@@ -15,6 +15,7 @@ const Diagram = () => {
     indicators,
     indicatorInfo,
     indicatorYear,
+    indicatorIndex,
   } = useContext(QueriesContext);
 
   const { language } = useParams();
@@ -47,7 +48,11 @@ const Diagram = () => {
       </div>
       {regData ? (
         !isGender ? (
-          <PieChart data={regData} year={indicatorYear} />
+          <PieChart
+            data={regData}
+            year={indicatorYear}
+            indicatorIndex={indicatorIndex}
+          />
         ) : (
           <PieChartGenders data={regData} year={indicatorYear} />
         )

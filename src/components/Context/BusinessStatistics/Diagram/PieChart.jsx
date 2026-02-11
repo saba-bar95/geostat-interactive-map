@@ -5,9 +5,8 @@ import * as am5percent from "@amcharts/amcharts5/percent";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import { useParams } from "react-router";
 
-const PieChart = ({ data, year }) => {
+const PieChart = ({ data, year, indicatorIndex }) => {
   const { language } = useParams();
-
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -39,7 +38,7 @@ const PieChart = ({ data, year }) => {
         (item) =>
           item[`w_${year}`] != null &&
           item.region_id !== "12" &&
-          item.region_id !== "48"
+          item.region_id !== "48",
       )
       .map((item) => ({
         ...item,
@@ -60,14 +59,16 @@ const PieChart = ({ data, year }) => {
             ? windowWidth < 769
               ? -140
               : windowWidth < 1201
-              ? -175
-              : -130
+                ? -175
+                : -130
             : windowWidth < 769
-            ? -200
-            : windowWidth < 1201
-            ? -150
-            : -130,
-      })
+              ? indicatorIndex === 0
+                ? -120
+                : -200
+              : windowWidth < 1201
+                ? -150
+                : -130,
+      }),
     );
 
     const series = chart.series.push(
@@ -77,7 +78,7 @@ const PieChart = ({ data, year }) => {
         fillField: "color",
         legendLabelText: "{category}",
         legendValueText: "{value.formatNumber('0.0')}",
-      })
+      }),
     );
 
     series.states.create("hidden", { endAngle: -90 });
@@ -101,13 +102,13 @@ const PieChart = ({ data, year }) => {
         ? windowWidth < 769
           ? 9
           : windowWidth < 1201
-          ? 12
-          : 13
+            ? 12
+            : 13
         : windowWidth < 769
-        ? 10
-        : windowWidth < 1201
-        ? 13
-        : 14;
+          ? 10
+          : windowWidth < 1201
+            ? 13
+            : 14;
 
     tooltip.label.setAll({
       fontSize,
@@ -147,19 +148,21 @@ const PieChart = ({ data, year }) => {
             ? windowWidth < 769
               ? -95
               : windowWidth < 1201
-              ? -150
-              : -135
+                ? -150
+                : -135
             : windowWidth < 769
-            ? -145
-            : windowWidth < 1201
-            ? -135
-            : -125
+              ? indicatorIndex === 0
+                ? -80
+                : -145
+              : windowWidth < 1201
+                ? -135
+                : -125,
         ),
         x: am5.percent(50),
         centerX: am5.percent(50),
         width: am5.percent(100),
         useDefaultMarker: true,
-      })
+      }),
     );
 
     legend.itemContainers.template.setAll({ width: am5.percent(100) });
@@ -170,13 +173,13 @@ const PieChart = ({ data, year }) => {
           ? windowWidth < 769
             ? 11
             : windowWidth < 1201
-            ? 12
-            : 13
+              ? 12
+              : 13
           : windowWidth < 769
-          ? 12
-          : windowWidth < 1201
-          ? 13
-          : 14,
+            ? 12
+            : windowWidth < 1201
+              ? 13
+              : 14,
       fontWeight: "600",
       fontFamily: "Verdana",
       oversizedBehavior: "wrap",
@@ -185,13 +188,13 @@ const PieChart = ({ data, year }) => {
           ? windowWidth < 769
             ? 120
             : windowWidth < 1201
-            ? 185
-            : 200
+              ? 185
+              : 200
           : windowWidth < 769
-          ? 120
-          : windowWidth < 1201
-          ? 185
-          : 200,
+            ? 120
+            : windowWidth < 1201
+              ? 185
+              : 200,
       maxHeight: 30,
     });
 
@@ -209,7 +212,7 @@ const PieChart = ({ data, year }) => {
     });
 
     const sortedDataItems = [...series.dataItems].sort(
-      (a, b) => b.get("value") - a.get("value")
+      (a, b) => b.get("value") - a.get("value"),
     );
     legend.data.setAll(sortedDataItems);
 
@@ -217,7 +220,7 @@ const PieChart = ({ data, year }) => {
     series.ticks.template.setAll({ forceHidden: true });
 
     return () => root.dispose();
-  }, [coloredData, language, year, windowWidth]);
+  }, [coloredData, language, year, windowWidth, indicatorIndex]);
 
   return (
     <div style={{ width: "100%", maxHeight: "80vh", overflow: "auto" }}>
@@ -228,8 +231,8 @@ const PieChart = ({ data, year }) => {
             windowWidth < 769
               ? "200px"
               : windowWidth < 1201
-              ? "280px"
-              : "290px",
+                ? "280px"
+                : "290px",
           minHeight: "700px",
         }}
       />
