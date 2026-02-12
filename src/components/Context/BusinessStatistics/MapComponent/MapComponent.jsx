@@ -56,17 +56,32 @@ const MapComponent = () => {
     companiesData,
     setIsLoadingCompanies,
     selectedCompany,
+    selectedLink,
+    setCompaniesData,
+    setSelectedFindRegionId,
+    setSelectedFormID,
+    setSelectedActivityID
   } = useContext(QueriesContext);
   const { language } = useParams();
 
   const mapRef = useRef(null);
   const clusterRef = useRef(null);
 
+
   useEffect(() => {
     if (!selectedCompany) {
       setSelectedMarker(null);
     }
   }, [selectedCompany]);
+
+
+    useEffect(() => {
+      setSelectedMarker(null);
+      setCompaniesData(null)
+      setSelectedFindRegionId(null)
+      setSelectedFormID(null)
+      setSelectedActivityID(null)
+  }, [selectedLink]);
 
   useEffect(() => {
     if (companiesData) {

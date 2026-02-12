@@ -337,6 +337,7 @@ const BusinessStatistics = () => {
         indicatorIndex,
         selectedFormID,
         selectedActivityID,
+        setCompaniesData
       }}>
       <div className="app-container">
         {isLoadingCompanies && <LoadingSpinner />}
