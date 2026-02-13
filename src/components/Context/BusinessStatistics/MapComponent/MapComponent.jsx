@@ -81,6 +81,8 @@ const MapComponent = () => {
 
   const prevLinkRef = useRef(selectedLink);
 
+  console.log(prevLinkRef);
+
   useEffect(() => {
     setSelectedMarker(null);
     setCompaniesData(null);
@@ -89,7 +91,7 @@ const MapComponent = () => {
     setSelectedActivityID(null);
 
     // Reset zoom when navigating away from GIS
-    if (prevLinkRef.current?.href === "gis" && selectedLink.href !== "gis") {
+    if (prevLinkRef.current?.href === "gis" && selectedLink?.href !== "gis") {
       if (mapRef.current) {
         mapRef.current.setZoom(8);
         setZoomLevel(8);
@@ -260,7 +262,8 @@ const MapComponent = () => {
         center={center}
         zoom={zoomLevel}
         zoomControl={false}
-        ref={mapRef}>
+        ref={mapRef}
+      >
         <LayersControl>
           <LayersControl.BaseLayer checked name="Google Terrain">
             <TileLayer
@@ -303,19 +306,22 @@ const MapComponent = () => {
             iconCreateFunction={createCustomClusterIcon}
             ref={clusterRef}
             zoomToBoundsOnClick={true}
-            spiderfyOnMaxZoom={true}>
+            spiderfyOnMaxZoom={true}
+          >
             {markers}
             {selectedMarker && (
               <Popup
                 position={[selectedMarker.X, selectedMarker.Y]}
                 color="#33ff00"
-                className="selected-company-popup">
+                className="selected-company-popup"
+              >
                 <div
                   style={{
                     backgroundColor: "#f0f8ff",
                     padding: "10px",
                     borderLeft: "4px solid #007bff",
-                  }}>
+                  }}
+                >
                   <strong style={{ color: "#007bff" }}>
                     {selectedMarker.Full_Name}
                   </strong>
@@ -324,7 +330,8 @@ const MapComponent = () => {
                   <a
                     href={`https://br.geostat.ge/?identificationNumber=${selectedMarker.Legal_Code}`}
                     target="_blank"
-                    rel="noreferrer">
+                    rel="noreferrer"
+                  >
                     Info
                   </a>
                 </div>
@@ -394,7 +401,8 @@ const MapComponent = () => {
                 }}
                 key={key}
                 data={value}
-                style={getStyle(value, zoomLevel, "region", regColor)}>
+                style={getStyle(value, zoomLevel, "region", regColor)}
+              >
                 <Popup>
                   <p className="popup-para">{region[`name_${language}`]}</p>
                   {typeof regionNumber === "number" &&
@@ -470,7 +478,8 @@ const MapComponent = () => {
                 }}
                 key={el.properties.NAME_GE}
                 data={el}
-                style={getStyle(el, zoomLevel, "municipality", munColor)}>
+                style={getStyle(el, zoomLevel, "municipality", munColor)}
+              >
                 <Popup>
                   <p className="popup-para">
                     {language === "ge"
